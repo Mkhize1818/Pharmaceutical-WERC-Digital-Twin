@@ -385,7 +385,7 @@ const TrueCostTab = ({ tc, projection }) => {
             <div className="card p-6" data-testid="tariff-table">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="font-display text-xl font-medium">Underlying tariffs &amp; escalation (2025)</h3>
-                    <span className="chip">Source · Aspen Model v6 · Inputs</span>
+                    <span className="chip">Source · Water Model v6 · Inputs</span>
                 </div>
                 <div className="grid md:grid-cols-3 gap-4 text-sm">
                     {[

@@ -23,7 +23,7 @@ app = FastAPI(title="WERC Water Digital Twin")
 api = APIRouter(prefix="/api")
 
 # ---------------------------------------------------------------------------
-# STATIC MODEL DATA (extracted from Aspen Model v6.xlsm)
+# STATIC MODEL DATA (extracted from client's water risk model)
 # ---------------------------------------------------------------------------
 YEARS = list(range(2025, 2051))
 

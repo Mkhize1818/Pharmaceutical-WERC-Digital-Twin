@@ -50,7 +50,8 @@ Model data is extracted verbatim from:
 - [x] Cumulative savings tab — annual bar + cumulative area + 3 summary cards
 - [x] Standalone HTML `/standalone.html` — same 5 tabs in a single file (Chart.js)
 - [x] Corporate styling — forest green (#006838), Aspen lime (#8DC63F), water blue (#0891B2)
-- [x] **Rebrand (Jan 2026)**: all client names replaced with "Pharmaceutical Company"; Talbot logo added top-left; "WERC Digital Twin" title centered in header
+- [x] **Rebrand (Jan 2026)**: all client names replaced with "Pharmaceutical Company"; Talbot logo added top-left; "WERC Digital Twin" title centered in header; no visible "Aspen" text anywhere
+- [x] **PDF export (Jan 2026)**: "Download PDF" button in header (both React + standalone) → 6-page landscape A4 PDF presentation (cover + 5 view slides) via `html2canvas` + `jsPDF`, filename pattern `WERC-Water-Digital-Twin-YYYY-MM-DD.pdf`
 - [x] Backend test suite (9 pytest cases, 100% pass)
 
 ## Test Credentials
