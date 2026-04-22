@@ -49,21 +49,20 @@ const Gate = ({ onUnlock }) => {
         <div className="min-h-screen hero-gradient flex items-center justify-center px-6" data-testid="password-gate">
             <div className="max-w-md w-full">
                 <div className="mb-10 fade-up">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-[var(--aspen-green)] flex items-center justify-center">
-                            <Droplets className="w-5 h-5 text-white" />
-                        </div>
+                    <div className="flex items-center gap-3 mb-6">
+                        <img src="/talbot-logo.png" alt="Talbot" className="h-12 w-auto" data-testid="gate-talbot-logo" />
+                        <div className="h-8 w-px bg-slate-300" />
                         <div>
-                            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">WERC Digital Twin</div>
-                            <div className="font-display text-xl font-semibold">Aspen Gqeberha</div>
+                            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Digital Twin</div>
+                            <div className="font-display text-lg font-semibold">WERC</div>
                         </div>
                     </div>
                     <h1 className="font-display text-4xl font-medium leading-tight mb-3">
                         Water risk, <span className="italic text-[var(--aspen-green)]">quantified.</span>
                     </h1>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                        A live scenario model for Aspen SA Operations (Port Elizabeth), built from the WERC
-                        feedback study of 15&nbsp;August&nbsp;2025. Explore business-as-usual exposure and run
+                        A live scenario model for a <b>Pharmaceutical Company</b>, built on the WERC
+                        feedback study methodology. Explore business-as-usual exposure and run
                         strategic interventions from 2025 to 2050.
                     </p>
                 </div>
@@ -95,7 +94,7 @@ const Gate = ({ onUnlock }) => {
                         {loading ? "Verifying…" : <>Enter Digital Twin <ArrowRight className="w-4 h-4" /></>}
                     </button>
                     <div className="text-[11px] text-slate-400 mt-3 text-center">
-                        Confidential · Prepared for Aspen Pharmacare · DWFM &times; KfW-IPEX
+                        Confidential · Prepared by Talbot · DWFM &times; KfW-IPEX
                     </div>
                 </form>
             </div>
@@ -145,7 +144,7 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                     <div className="max-w-2xl">
                         <div className="flex items-center gap-2 mb-3">
                             <span className="chip" style={{ background: "rgba(255,255,255,0.12)", color: "#a7f3d0" }}>
-                                WERC · 1002727 · 15 Aug 2025
+                                WERC · 15 Aug 2025
                             </span>
                             <span className="chip chip-warn">Water-stressed Catchment</span>
                         </div>
@@ -153,8 +152,8 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                             {site.name}
                         </h2>
                         <p className="text-emerald-100/80 mt-3 text-sm md:text-base leading-relaxed">
-                            Sondags (Sundays) Catchment &middot; Mzimbvubu-Tsitsikamma WMA.
-                            Basin water stress is projected to rise from <b>High</b> today to
+                            {site.catchment}. Basin water stress is projected to rise from
+                            <b className="text-white"> High</b> today to
                             <b className="text-white"> Extremely High</b> by 2050.
                             This twin models the real cost & risk of every litre of water used on-site.
                         </p>
@@ -700,19 +699,22 @@ function Dashboard() {
         <div className="min-h-screen bg-paper">
             {/* Header */}
             <header className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#e8e8e1]" data-testid="header">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-[var(--aspen-green)] flex items-center justify-center">
-                            <Droplets className="w-4 h-4 text-white" />
-                        </div>
-                        <div>
-                            <div className="text-[10px] uppercase tracking-[0.2em] text-slate-500">WERC Digital Twin</div>
-                            <div className="font-display font-semibold text-lg leading-tight">Aspen Gqeberha</div>
-                        </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 grid grid-cols-3 items-center gap-4">
+                    {/* Left: Talbot logo */}
+                    <div className="flex items-center gap-3 justify-self-start" data-testid="header-talbot-logo">
+                        <img src="/talbot-logo.png" alt="Talbot" className="h-10 w-auto" />
                     </div>
-                    <button onClick={() => { localStorage.removeItem("aspen_token"); setAuthed(false); }} className="btn-ghost flex items-center gap-2 text-sm" data-testid="logout-btn">
-                        <LogOut className="w-3.5 h-3.5" /> Sign out
-                    </button>
+                    {/* Center: WERC Digital Twin */}
+                    <div className="justify-self-center text-center" data-testid="header-title">
+                        <div className="text-[10px] uppercase tracking-[0.24em] text-slate-500">Digital Twin</div>
+                        <div className="font-display font-semibold text-xl leading-tight text-[var(--aspen-green-deep)]">WERC</div>
+                    </div>
+                    {/* Right: Sign out */}
+                    <div className="justify-self-end">
+                        <button onClick={() => { localStorage.removeItem("aspen_token"); setAuthed(false); }} className="btn-ghost flex items-center gap-2 text-sm" data-testid="logout-btn">
+                            <LogOut className="w-3.5 h-3.5" /> Sign out
+                        </button>
+                    </div>
                 </div>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-3 flex gap-1 overflow-x-auto" data-testid="tab-bar">
                     {TABS.map(t => (
@@ -730,7 +732,7 @@ function Dashboard() {
             </main>
 
             <footer className="border-t border-[#e8e8e1] py-6 text-center text-xs text-slate-400 mt-16">
-                Aspen Gqeberha Water Digital Twin · Model data: Aspen Model v6 (Aug 2025) · Demo build
+                WERC Water Digital Twin · Model data: Water Model v6 (Aug 2025) · Demo build by Talbot
             </footer>
         </div>
     );

@@ -1,6 +1,6 @@
 """
-Aspen Gqeberha Water Digital Twin - Backend
-Source: Aspen Model v6.xlsm + WERC Feedback deck (Aug 2025)
+WERC Water Digital Twin - Backend
+Source: Water Model v6.xlsm + WERC Feedback deck (Aug 2025)
 All figures are extracted verbatim from the client's risk model.
 """
 from fastapi import FastAPI, APIRouter, HTTPException
@@ -19,7 +19,7 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-app = FastAPI(title="Aspen Gqeberha Water Digital Twin")
+app = FastAPI(title="WERC Water Digital Twin")
 api = APIRouter(prefix="/api")
 
 # ---------------------------------------------------------------------------
@@ -194,9 +194,9 @@ STRATEGY_TOTALS = {
 }
 
 SITE_INFO = {
-    "name": "Aspen Operations SA — Gqeberha (Port Elizabeth)",
-    "projects": "WERC Feedback · Project 1002727 · 15 August 2025",
-    "catchment": "Sondags (Sundays) Catchment, Mzimbvubu-Tsitsikamma WMA",
+    "name": "Pharmaceutical Company",
+    "projects": "WERC Feedback · 15 August 2025",
+    "catchment": "Water-stressed coastal catchment",
     "basin_stress_2025": "High",
     "basin_stress_2050": "Extremely High",
     "processes": ["Oral Solid Dose (OSD) Manufacturing", "Small Volume Parenteral (SVP) Manufacturing"],
@@ -366,7 +366,7 @@ async def initiatives():
 
 @api.get("/")
 async def root():
-    return {"service": "Aspen Gqeberha Water Digital Twin", "status": "online"}
+    return {"service": "WERC Water Digital Twin", "status": "online"}
 
 
 app.include_router(api)

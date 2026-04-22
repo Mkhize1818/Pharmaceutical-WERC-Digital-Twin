@@ -1,17 +1,14 @@
-# Aspen Gqeberha — Water Digital Twin
+# WERC Water Digital Twin — Generic Demo
 
 ## Original Problem Statement
 Client wants a digital-twin demo (similar to the previous Liquid Ops twin) that incorporates
-the data and calculations from the Aspen Model v6.xlsm and the WERC feedback deck
-(1002727 · Aspen Gqeberha · 15 August 2025). Five required views:
+the data and calculations from an internal water-risk model + WERC feedback deck
+(15 August 2025). Five required views: BAU risk profile, current true cost of water,
+strategic simulator, long-term projection, cumulative savings.
 
-1. **BAU risk profile** — current water demand vs water availability by source (slide 36).
-2. **Current true cost of water** — R/kl risk exposure broken into climate, treatment,
-   municipal tariff and discharge tariff.
-3. **Strategic simulator** — sliders that reduce incoming municipal volume via
-   rainwater harvesting (default 10%), groundwater (default 20%) and water recovery (default 40%).
-4. **Long-term true-cost projection** — R/kl current → 2050 (BaU vs Strategic).
-5. **Cumulative savings** — BaU vs strategic, 2025 → 2050.
+**Subsequent rebranding**: all client-identifying names removed. Rebranded to a neutral
+**"Pharmaceutical Company"** placeholder so the same demo can be shown to multiple
+prospects. Talbot logo added top-left and "WERC Digital Twin" title centered in the header.
 
 ## User Choices (verbatim)
 - Aspen corporate styling
@@ -52,7 +49,8 @@ Model data is extracted verbatim from:
 - [x] Strategic simulator — 3 sliders + 2 toggles + live BaU-vs-Strategic area chart + 4 KPI cards + initiative detail
 - [x] Cumulative savings tab — annual bar + cumulative area + 3 summary cards
 - [x] Standalone HTML `/standalone.html` — same 5 tabs in a single file (Chart.js)
-- [x] Aspen corporate styling — forest green (#006838), Aspen lime (#8DC63F), water blue (#0891B2)
+- [x] Corporate styling — forest green (#006838), Aspen lime (#8DC63F), water blue (#0891B2)
+- [x] **Rebrand (Jan 2026)**: all client names replaced with "Pharmaceutical Company"; Talbot logo added top-left; "WERC Digital Twin" title centered in header
 - [x] Backend test suite (9 pytest cases, 100% pass)
 
 ## Test Credentials
