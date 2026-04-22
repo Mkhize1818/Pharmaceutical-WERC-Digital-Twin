@@ -1,0 +1,31 @@
+{
+  "summary": "Comprehensive backend + frontend testing of the Aspen Gqeberha Water Digital Twin. All 9 backend pytest cases pass (auth gate, site info, BAU supply/demand, true-cost breakdown, BAU projection, scenario with defaults, scenario sensitivity, initiatives). Model numbers match spec (2025 true cost 335.62 R/kl, 2050 BAU 753.46 R/kl, default scenario cumulative savings R2.61bn within R2.5-3bn range). Frontend: password gate (wrong → error, correct → unlock), Overview (hero + 4 KPIs + site + risks), BAU tab (stacked chart with reference lines), True cost tab (pie + 4 breakdown cards + tariff table), Simulator tab (3 sliders + 2 toggles + projection chart + 4 KPI cards + 5 initiative cards), live slider update (rainwater 10→25 bumps savings R2.61bn → R3.03bn), Savings tab (chart + 3 summary cards), sign-out returns to gate. Standalone HTML at /standalone.html gates on password, renders 5 tabs and 4 Chart.js canvases, and wrong password shows error.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Simulator toggles", "issues": ["Checkbox <input> for Smart metering and Desalination toggles is visually hidden (switch style). is_visible() on the raw input returns false; clicks must go through the label. Toggle still works but consumers of data-testid on the input should click the enclosing label or use force click."]},
+      {"screen": "Standalone /standalone.html slider", "issues": ["Keyboard ArrowRight did not move the first range slider value (stayed at 10 after focus+10× ArrowRight). Mouse drag likely works (React build works fine) but keyboard accessibility on the standalone range may need review."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_aspen_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Optional: move data-testid from hidden <input type=checkbox> to the outer <label class='switch'> so is_visible() works for toggles.",
+    "Optional: verify standalone.html range sliders are keyboard-focusable (tabindex / keydown handler) for accessibility."
+  ],
+  "critical_code_review_comments": [
+    "server.py uses `os.environ['MONGO_URL']` / `os.environ['DB_NAME']` at import time but never uses the db — harmless for this demo but dead code; consider removing the Mongo client since no persistence is needed, or wire up log persistence.",
+    "`@app.on_event('shutdown')` is deprecated in FastAPI; prefer lifespan context manager.",
+    "Scenario floor logic in server.py lines 323-326 only applies when `desalination_on` is True AND all sliders at default minimums — the strat-cost floor to STRAT_TRUE_COST[y] will never apply in the default UI state (desal off). Intentional, but worth documenting.",
+    "Frontend App.js is 742 lines — consider splitting Gate, Overview, BauTab, TrueCostTab, SimulatorTab, SavingsTab into separate files (per guidelines >700 lines should split).",
+    "`useEffect` with empty-ish dep array disables ESLint rule but the `run` closure captures state; acceptable here, but debounce logic lives in two effects which is slightly duplicated."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "100%", "frontend": "100%" },
+  "test_credentials": "Demo password: aspen2050 (confirmed working)",
+  "seed_data_creation": "None - app uses in-code static model data from Aspen Model v6.xlsm",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend test file at /app/backend/tests/test_aspen_api.py with 9 pytest cases covering all /api/aspen/* endpoints and /api/auth/login. Run: pytest /app/backend/tests/test_aspen_api.py -v. All model numbers validated against client spec: 2025 true cost 335.62, 2050 BAU 753.46, default-scenario cumulative savings R2.61bn. Simulator toggles inputs are visually hidden; test via label click. Standalone HTML also gates on 'aspen2050' and renders 4 Chart.js canvases across 5 tabs."
+}

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aspen Gqeberha · Water Digital Twin</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+:root{
+    --aspen-green:#006838; --aspen-green-deep:#004a28; --aspen-lime:#8dc63f;
+    --water-blue:#0891b2; --water-blue-deep:#0e7490;
+    --ink:#0b1f18; --slate:#334155; --paper:#fafaf7; --card:#fff;
+    --warn:#d97706; --danger:#b91c1c;
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0;height:100%}
+body{
+    font-family:'Manrope',ui-sans-serif,system-ui,sans-serif;
+    color:var(--ink); background:var(--paper);
+    -webkit-font-smoothing:antialiased;
+    background-image:
+        radial-gradient(rgba(0,104,56,0.04) 1px,transparent 1px),
+        radial-gradient(rgba(0,104,56,0.03) 1px,transparent 1px);
+    background-size:40px 40px,20px 20px;
+    background-position:0 0,20px 20px;
+}
+.font-display{font-family:'Fraunces',serif;font-optical-sizing:auto;letter-spacing:-0.01em}
+.container{max-width:1280px;margin:0 auto;padding:0 24px}
+.card{background:var(--card);border:1px solid #e8e8e1;border-radius:14px;box-shadow:0 1px 2px rgba(11,31,24,.04);transition:.2s}
+.card:hover{box-shadow:0 6px 24px rgba(11,31,24,.08)}
+.card-dark{background:linear-gradient(140deg,#0b1f18 0%,#12372a 60%,#0e7490 180%);color:#f7fff9;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,74,40,.25)}
+
+.btn-primary{background:var(--aspen-green);color:#fff;padding:.65rem 1.1rem;border:0;border-radius:10px;font:600 14px 'Manrope';cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-primary:hover{background:var(--aspen-green-deep);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--aspen-green);border:1px solid #d7d7cc;padding:.55rem 1rem;border-radius:10px;font:500 13px 'Manrope';cursor:pointer}
+.btn-ghost:hover{border-color:var(--aspen-green);background:rgba(0,104,56,.04)}
+
+.chip{display:inline-flex;align-items:center;gap:.4rem;font:600 11px 'Manrope';letter-spacing:.04em;text-transform:uppercase;padding:.25rem .6rem;border-radius:999px;background:rgba(0,104,56,.08);color:var(--aspen-green-deep)}
+.chip-warn{background:rgba(217,119,6,.1);color:var(--warn)}
+.chip-danger{background:rgba(185,28,28,.1);color:var(--danger)}
+.chip-blue{background:rgba(8,145,178,.1);color:var(--water-blue-deep)}
+
+.metric-value{font-family:'Fraunces',serif;font-weight:500;font-size:2.2rem;letter-spacing:-.02em;line-height:1}
+.metric-label{font:600 12px 'Manrope';text-transform:uppercase;letter-spacing:.08em;color:var(--slate)}
+
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--aspen-green) var(--pct,20%),#e5e5dc var(--pct,20%));outline:none;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--aspen-green);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--aspen-green);cursor:pointer}
+
+.switch{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .track{position:absolute;inset:0;cursor:pointer;background:#cbd5e1;border-radius:999px;transition:.2s}
+.switch .track:before{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch input:checked + .track{background:var(--aspen-green)}
+.switch input:checked + .track:before{transform:translateX(18px)}
+
+.tab{padding:.7rem 1rem;border-radius:10px;font-weight:500;color:var(--slate);cursor:pointer;border:1px solid transparent;background:transparent;transition:.16s;font-size:14px;font-family:'Manrope';white-space:nowrap}
+.tab:hover{color:var(--aspen-green-deep);background:rgba(0,104,56,.04)}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fu .5s ease both}
+
+.grid{display:grid;gap:1rem}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:900px){ .grid-3,.grid-4,.grid-5{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){ .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr} }
+
+.hero-gradient{background:radial-gradient(ellipse at top right,rgba(8,145,178,.15) 0%,transparent 60%),radial-gradient(ellipse at top left,rgba(0,104,56,.12) 0%,transparent 55%),linear-gradient(180deg,#fafaf7 0%,#f3f3ec 100%)}
+
+.droplet{display:inline-block;width:10px;height:10px;border-radius:50%}
+
+input[type=password]{width:100%;padding:.8rem 1rem;border:1px solid #e8e8e1;border-radius:10px;font:500 16px 'Manrope';outline:none;background:#fff}
+input[type=password]:focus{border-color:var(--aspen-green);box-shadow:0 0 0 3px rgba(0,104,56,.15)}
+.err{margin-top:.75rem;font-size:13px;color:var(--danger);display:flex;align-items:center;gap:.4rem}
+
+.hidden{display:none!important}
+header.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid #e8e8e1}
+footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12px;color:#94a3b8;margin-top:64px}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<section id="gate" class="hero-gradient" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="max-width:460px;width:100%">
+    <div style="margin-bottom:32px" class="fade-up">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="width:40px;height:40px;border-radius:12px;background:var(--aspen-green);display:flex;align-items:center;justify-content:center">
+          <i data-lucide="droplets" style="color:#fff;width:20px;height:20px"></i>
+        </div>
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:#64748b">WERC Digital Twin</div>
+          <div class="font-display" style="font-size:20px;font-weight:600">Aspen Gqeberha</div>
+        </div>
+      </div>
+      <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 12px">Water risk, <span style="font-style:italic;color:var(--aspen-green)">quantified.</span></h1>
+      <p style="color:#475569;font-size:14px;line-height:1.6;margin:0">A live scenario model for Aspen SA Operations (Port Elizabeth), built from the WERC feedback study of 15 August 2025. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
+    </div>
+    <form id="loginForm" class="card" style="padding:24px" onsubmit="handleLogin(event)">
+      <label class="metric-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <i data-lucide="lock-keyhole" style="width:14px;height:14px"></i> Demo access passphrase
+      </label>
+      <input id="pwd" type="password" placeholder="••••••••" autofocus>
+      <div id="err" class="err hidden"><i data-lucide="alert-triangle" style="width:14px;height:14px"></i><span></span></div>
+      <button type="submit" class="btn-primary" style="width:100%;margin-top:16px;justify-content:center">
+        Enter Digital Twin <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+      </button>
+      <div style="font-size:11px;color:#94a3b8;margin-top:12px;text-align:center">Confidential · Prepared for Aspen Pharmacare · DWFM × KfW-IPEX</div>
+    </form>
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding-top:12px;padding-bottom:12px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--aspen-green);display:flex;align-items:center;justify-content:center">
+          <i data-lucide="droplets" style="color:#fff;width:16px;height:16px"></i>
+        </div>
+        <div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:#64748b">WERC Digital Twin</div>
+          <div class="font-display" style="font-weight:600;font-size:18px;line-height:1.1">Aspen Gqeberha</div>
+        </div>
+      </div>
+      <button class="btn-ghost" onclick="signOut()" style="display:flex;align-items:center;gap:6px">
+        <i data-lucide="log-out" style="width:14px;height:14px"></i> Sign out
+      </button>
+    </div>
+    <div class="container" style="padding-bottom:12px;display:flex;gap:4px;overflow-x:auto">
+      <button class="tab active" data-tab="overview" onclick="setTab('overview')">Overview</button>
+      <button class="tab" data-tab="bau" onclick="setTab('bau')">BAU supply/demand</button>
+      <button class="tab" data-tab="truecost" onclick="setTab('truecost')">True cost</button>
+      <button class="tab" data-tab="simulator" onclick="setTab('simulator')">Strategic simulator</button>
+      <button class="tab" data-tab="savings" onclick="setTab('savings')">Cumulative savings</button>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top:32px;padding-bottom:48px">
+    <!-- OVERVIEW -->
+    <section id="tab-overview" class="fade-up">
+      <div class="card-dark" style="padding:40px;margin-bottom:28px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start">
+          <div style="max-width:640px">
+            <div style="display:flex;gap:8px;margin-bottom:12px">
+              <span class="chip" style="background:rgba(255,255,255,.12);color:#a7f3d0">WERC · 1002727 · 15 Aug 2025</span>
+              <span class="chip chip-warn">Water-stressed Catchment</span>
+            </div>
+            <h2 class="font-display" style="font-size:36px;font-weight:500;margin:0;line-height:1.15">Aspen Operations SA — Gqeberha (Port Elizabeth)</h2>
+            <p style="color:rgba(167,243,208,.85);margin-top:12px;font-size:15px;line-height:1.6">Sondags (Sundays) Catchment · Mzimbvubu-Tsitsikamma WMA. Basin water stress is projected to rise from <b>High</b> today to <b style="color:#fff">Extremely High</b> by 2050. This twin models the real cost &amp; risk of every litre of water used on-site.</p>
+          </div>
+          <div style="display:flex;gap:28px;text-align:right">
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Today demand</div>
+              <div class="font-display" style="font-size:28px">520.6</div>
+              <div style="font-size:11px;color:rgba(167,243,208,.55)">kl / day</div>
+            </div>
+            <div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">2050 demand</div>
+              <div class="font-display" style="font-size:28px;color:var(--aspen-lime)">1973.0</div>
+              <div style="font-size:11px;color:rgba(167,243,208,.55)">kl / day (+279%)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-bottom:28px">
+        <div class="card" style="padding:20px">
+          <div class="metric-label">True cost · 2025</div>
+          <div class="metric-value" style="margin-top:10px">335.6 <span style="font-size:14px;color:#64748b;font-family:Manrope">R/kl</span></div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="metric-label">BAU true cost · 2050</div>
+          <div class="metric-value" style="margin-top:10px;color:var(--danger)">753.5 <span style="font-size:14px;color:#64748b;font-family:Manrope">R/kl</span></div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px">+124% vs 2025</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="metric-label">Municipal dependency 2025</div>
+          <div class="metric-value" style="margin-top:10px;color:var(--warn)">70%</div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px">Drops to 0% post-2026</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div class="metric-label">Full-strategy savings</div>
+          <div class="metric-value" style="margin-top:10px;color:var(--aspen-green)">R 3.8 <span style="font-size:14px;color:#64748b;font-family:Manrope">bn</span></div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px">BaU 6.6 bn → Strategic 2.8 bn</div>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:2fr 1fr;gap:24px">
+        <div class="card" style="padding:24px">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
+            <div>
+              <div class="metric-label">Site processes</div>
+              <h3 class="font-display" style="font-size:20px;font-weight:500;margin:4px 0 0">Pharmaceutical manufacturing</h3>
+            </div>
+            <i data-lucide="factory" style="width:24px;height:24px;color:var(--aspen-green)"></i>
+          </div>
+          <div class="grid grid-2">
+            <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
+              <div class="metric-label" style="font-size:10px">76% of output</div>
+              <div style="font-weight:500;margin-top:4px">Oral Solid Dose (OSD) Manufacturing</div>
+            </div>
+            <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
+              <div class="metric-label" style="font-size:10px">24% of output</div>
+              <div style="font-weight:500;margin-top:4px">Small Volume Parenteral (SVP) Manufacturing</div>
+            </div>
+          </div>
+          <div style="margin-top:18px;font-size:13px;color:#475569;line-height:1.6">Production pipeline includes NH₃ condensation (+827 kl/d), SVP3 expansion (+33%) and WTP upgrade (75% recovery). Annual production today: <b>3 142 103 kg</b>.</div>
+        </div>
+        <div class="card" style="padding:24px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div class="metric-label">Key catchment risks</div>
+            <i data-lucide="shield" style="width:18px;height:18px;color:var(--water-blue-deep)"></i>
+          </div>
+          <div style="font-size:14px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Baseline water stress</span><span class="chip chip-warn">High</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Inter-annual variability</span><span class="chip chip-warn">High</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Riverine flood risk</span><span class="chip chip-danger">High</span></div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Coastal eutrophication</span><span class="chip chip-warn">High</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:#475569">Groundwater quality</span><span class="chip">Good</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BAU SUPPLY / DEMAND -->
+    <section id="tab-bau" class="hidden fade-up">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px">
+        <div>
+          <span class="chip chip-warn">Business as Usual · Scenario 4</span>
+          <h2 class="font-display" style="font-size:30px;font-weight:500;margin:8px 0 0">Daily water demand vs availability</h2>
+          <p style="color:#475569;font-size:14px;max-width:640px;margin-top:8px">Consumption stacked by source against total demand. Municipal reliance ends with the second borehole in 2026; groundwater carries the site until WUL renewal in 2050.</p>
+        </div>
+        <div style="text-align:right">
+          <div class="metric-label">Model period</div>
+          <div class="font-display" style="font-size:24px">2025 – 2050</div>
+        </div>
+      </div>
+      <div class="card" style="padding:24px">
+        <canvas id="bauChart" height="130"></canvas>
+      </div>
+      <div class="grid grid-4" style="margin-top:20px">
+        <div class="card" style="padding:20px"><div class="metric-label">2025 demand</div><div class="metric-value" style="margin-top:10px">520.6 <span style="font-size:13px;color:#64748b;font-family:Manrope">kl/d</span></div></div>
+        <div class="card" style="padding:20px"><div class="metric-label">2050 demand</div><div class="metric-value" style="margin-top:10px;color:var(--warn)">1973.0 <span style="font-size:13px;color:#64748b;font-family:Manrope">kl/d</span></div></div>
+        <div class="card" style="padding:20px"><div class="metric-label">2025 municipal share</div><div class="metric-value" style="margin-top:10px;color:var(--warn)">70%</div></div>
+        <div class="card" style="padding:20px"><div class="metric-label">2050 groundwater share</div><div class="metric-value" style="margin-top:10px;color:var(--aspen-green)">89%</div></div>
+      </div>
+    </section>
+
+    <!-- TRUE COST -->
+    <section id="tab-truecost" class="hidden fade-up">
+      <div style="margin-bottom:20px">
+        <span class="chip chip-blue">Current state · 2025</span>
+        <h2 class="font-display" style="font-size:30px;font-weight:500;margin:8px 0 0">True cost of water</h2>
+        <p style="color:#475569;font-size:14px;max-width:720px;margin-top:8px">The real cost per kilolitre blends municipal tariffs, discharge and treatment costs with an adjusted climate-risk premium reflecting Day-Zero exposure in the Sondags catchment.</p>
+      </div>
+      <div class="grid" style="grid-template-columns:3fr 2fr;gap:24px">
+        <div class="card" style="padding:24px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+            <div class="metric-label">Composition · R/kl</div>
+            <div class="font-display" style="font-size:28px;color:var(--aspen-green)">R 335 <span style="color:#94a3b8;font-size:13px;font-family:Manrope">per kl</span></div>
+          </div>
+          <canvas id="tcPie" height="260"></canvas>
+        </div>
+        <div id="tcList"></div>
+      </div>
+
+      <div class="card" style="padding:24px;margin-top:24px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px;align-items:center">
+          <h3 class="font-display" style="font-size:20px;font-weight:500;margin:0">Underlying tariffs &amp; escalation (2025)</h3>
+          <span class="chip">Source · Aspen Model v6 · Inputs</span>
+        </div>
+        <div class="grid grid-3" style="font-size:13px" id="tariffGrid"></div>
+      </div>
+    </section>
+
+    <!-- SIMULATOR -->
+    <section id="tab-simulator" class="hidden fade-up">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:24px">
+        <div>
+          <span class="chip">Strategic outlook simulator</span>
+          <h2 class="font-display" style="font-size:30px;font-weight:500;margin:8px 0 0">Design your water strategy</h2>
+          <p style="color:#475569;font-size:14px;max-width:640px;margin-top:8px">Adjust each intervention to reduce incoming municipal volume. The twin recomputes true cost, risk exposure and cumulative savings instantly.</p>
+        </div>
+        <div class="card-dark" style="padding:16px 24px;text-align:right">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Cumulative savings 2025–2050</div>
+          <div class="font-display" id="simHeroSavings" style="font-size:30px;color:var(--aspen-lime)">R 0</div>
+          <div id="simHeroBau" style="font-size:11px;color:rgba(167,243,208,.7)"></div>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr 2fr;gap:24px">
+        <div>
+          <div class="card" style="padding:20px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div style="display:flex;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(141,198,63,.18);display:flex;align-items:center;justify-content:center"><i data-lucide="sun" style="width:16px;height:16px;color:#8dc63f"></i></div>
+                <div>
+                  <div style="font-weight:500">Rainwater harvesting</div>
+                  <div style="font-size:12px;color:#64748b">Condensation + roof capture · 54 kl/d offset</div>
+                </div>
+              </div>
+              <div class="font-display" id="rwVal" style="font-size:22px;color:#8dc63f">10<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+            </div>
+            <input id="rwSlider" type="range" min="0" max="30" value="10" style="margin-top:16px">
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 10%</div>
+          </div>
+          <div class="card" style="padding:20px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div style="display:flex;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,104,56,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="waves" style="width:16px;height:16px;color:var(--aspen-green)"></i></div>
+                <div>
+                  <div style="font-weight:500">Additional groundwater</div>
+                  <div style="font-size:12px;color:#64748b">2× borehole, WUL extended to 2050</div>
+                </div>
+              </div>
+              <div class="font-display" id="gwVal" style="font-size:22px;color:var(--aspen-green)">20<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+            </div>
+            <input id="gwSlider" type="range" min="0" max="50" value="20" style="margin-top:16px">
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 20%</div>
+          </div>
+          <div class="card" style="padding:20px;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <div style="display:flex;gap:12px">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(8,145,178,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="recycle" style="width:16px;height:16px;color:var(--water-blue)"></i></div>
+                <div>
+                  <div style="font-weight:500">Water recovery plant</div>
+                  <div style="font-size:12px;color:#64748b">Effluent reuse, 75% recovery · 637 kl/d offset</div>
+                </div>
+              </div>
+              <div class="font-display" id="wrVal" style="font-size:22px;color:var(--water-blue)">40<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+            </div>
+            <input id="wrSlider" type="range" min="0" max="70" value="40" style="margin-top:16px">
+            <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 40%</div>
+          </div>
+          <div class="card" style="padding:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:500;display:flex;align-items:center;gap:6px"><i data-lucide="wrench" style="width:14px;height:14px;color:var(--aspen-green)"></i> Smart metering &amp; optimisation</div>
+                <div style="font-size:12px;color:#64748b;margin-top:2px">8% consumption reduction from 2027</div>
+              </div>
+              <label class="switch"><input id="smToggle" type="checkbox" checked><span class="track"></span></label>
+            </div>
+            <div style="height:1px;background:#e8e8e1;margin:14px 0"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:500;display:flex;align-items:center;gap:6px"><i data-lucide="droplets" style="width:14px;height:14px;color:var(--water-blue-deep)"></i> Desalination (North-End Lake)</div>
+                <div style="font-size:12px;color:#64748b;margin-top:2px">R52.5m CAPEX · 1000 kl/d · 32% from 2040</div>
+              </div>
+              <label class="switch"><input id="desalToggle" type="checkbox"><span class="track"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="padding:24px;margin-bottom:20px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <div>
+                <div class="metric-label">True cost of water · R/kl</div>
+                <h3 class="font-display" style="font-size:20px;font-weight:500;margin:4px 0 0">BaU vs Strategic · 2025–2050</h3>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:12px;color:#64748b">2050 reduction</div>
+                <div class="font-display" id="reducVal" style="font-size:24px;color:var(--aspen-green)">0%</div>
+              </div>
+            </div>
+            <canvas id="projChart" height="130"></canvas>
+          </div>
+          <div class="grid grid-4">
+            <div class="card" style="padding:16px"><div class="metric-label">Volume reduction · 2050</div><div class="metric-value" id="kpiRed" style="margin-top:8px;color:var(--aspen-green);font-size:26px">0%</div></div>
+            <div class="card" style="padding:16px"><div class="metric-label">Strategic TCW · 2050</div><div class="metric-value" id="kpiTcw" style="margin-top:8px;font-size:26px">–</div></div>
+            <div class="card" style="padding:16px"><div class="metric-label">BaU 25-yr cost</div><div class="metric-value" id="kpiBau" style="margin-top:8px;color:var(--warn);font-size:26px">–</div></div>
+            <div class="card" style="padding:16px"><div class="metric-label">Cumulative savings</div><div class="metric-value" id="kpiSav" style="margin-top:8px;color:var(--aspen-green);font-size:26px">–</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:24px;margin-top:24px">
+        <h3 class="font-display" style="font-size:20px;font-weight:500;margin:0 0 16px">Initiative detail · CAPEX &amp; impact</h3>
+        <div class="grid grid-5" id="initList" style="font-size:13px"></div>
+      </div>
+    </section>
+
+    <!-- SAVINGS -->
+    <section id="tab-savings" class="hidden fade-up">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px">
+        <div>
+          <span class="chip" style="background:rgba(141,198,63,.15);color:#4d7c0f">Financial outcome</span>
+          <h2 class="font-display" style="font-size:30px;font-weight:500;margin:8px 0 0">Cumulative savings</h2>
+          <p style="color:#475569;font-size:14px;max-width:640px;margin-top:8px">Year-on-year savings accrue as each initiative comes online. Hover the chart for any year to see the exact figure.</p>
+        </div>
+        <div class="card-dark" style="padding:16px 24px;text-align:right">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">25-yr savings</div>
+          <div class="font-display" id="savHero" style="font-size:32px;color:var(--aspen-lime)">R 0</div>
+        </div>
+      </div>
+      <div class="card" style="padding:24px">
+        <canvas id="savChart" height="130"></canvas>
+      </div>
+      <div class="grid grid-3" style="margin-top:20px">
+        <div class="card" style="padding:24px;text-align:center"><div class="metric-label">BaU 25-yr cost</div><div class="metric-value" id="sumBau" style="margin-top:8px;color:var(--danger);font-size:34px">–</div><div style="font-size:11px;color:#64748b;margin-top:6px">if no initiatives are implemented</div></div>
+        <div class="card" style="padding:24px;text-align:center"><div class="metric-label">Strategic 25-yr cost</div><div class="metric-value" id="sumStrat" style="margin-top:8px;color:var(--aspen-green);font-size:34px">–</div><div style="font-size:11px;color:#64748b;margin-top:6px">with active initiatives</div></div>
+        <div class="card-dark" style="padding:24px;text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Net benefit</div><div class="font-display" id="sumSav" style="margin-top:8px;color:var(--aspen-lime);font-size:34px">–</div><div style="font-size:11px;color:rgba(167,243,208,.7);margin-top:6px">cumulative savings over 25 years</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Aspen Gqeberha Water Digital Twin · Model data: Aspen Model v6 (Aug 2025) · Standalone demo</footer>
+</div>
+
+<script>
+// =========================================================================
+// DATA  (extracted from Aspen Model v6.xlsm + WERC deck, 15 Aug 2025)
+// =========================================================================
+const YEARS = Array.from({length:26},(_,i)=>2025+i);
+
+const BAU_DAILY = {
+    2025:[520.6,364.4,156.2,0,0], 2026:[1302.9,651.5,651.5,0,0],
+    2027:[1412.7,0,1412.7,0,0], 2028:[1412.7,0,1412.7,0,0],
+    2029:[1659.7,0,1659.7,0,0], 2030:[1659.7,0,1659.7,0,0]
+};
+for (let y=2031;y<=2050;y++) BAU_DAILY[y]=[1973.0,218.6,1754.4,0,0];
+const GW_AVAIL = y => y<2026 ? 376680/365 : 753360/365;
+
+const BAU_COST_RATIO = {2025:55.65,2026:58.53,2027:55.43,2028:60.17,2029:67.48,2030:72.84,2031:83.34,2032:89.81,2033:96.80,2034:104.35,2035:112.51,2036:121.32,2037:130.85,2038:141.15,2039:152.28,2040:164.31,2041:177.32,2042:191.39,2043:206.62,2044:223.08,2045:240.90,2046:260.17,2047:281.04,2048:303.62,2049:328.06,2050:354.53};
+const BAU_RISK = {2025:279.97,2026:137.61,2027:4.03,2028:4.40,2029:4.82,2030:5.27,2031:125.99,2032:133.44,2033:142.08,2034:150.90,2035:160.27,2036:169.80,2037:180.83,2038:192.10,2039:204.08,2040:216.27,2041:230.38,2042:244.79,2043:260.13,2044:275.76,2045:293.82,2046:312.30,2047:331.97,2048:352.04,2049:375.20,2050:398.93};
+const BAU_TRUE  = {2025:335.62,2026:196.13,2027:59.46,2028:64.57,2029:72.30,2030:78.11,2031:209.32,2032:223.25,2033:238.88,2034:255.25,2035:272.78,2036:291.12,2037:311.68,2038:333.24,2039:356.35,2040:380.58,2041:407.70,2042:436.19,2043:466.75,2044:498.84,2045:534.72,2046:572.48,2047:613.01,2048:655.65,2049:703.26,2050:753.46};
+const STRAT_TRUE= {2025:335.62,2026:188.79,2027:54.10,2028:58.76,2029:66.30,2030:71.59,2031:79.88,2032:86.21,2033:93.05,2034:105.52,2035:99.13,2036:107.41,2037:116.45,2038:126.24,2039:136.86,2040:148.36,2041:160.91,2042:174.50,2043:189.26,2044:205.26,2045:222.71,2046:241.62,2047:262.16,2048:284.44,2049:308.73,2050:335.07};
+
+const TARIFFS = {
+    "Municipal water":[30.24,"R/kl","+6% p.a."],
+    "Sewerage discharge":[23.09,"R/kl","+6% p.a."],
+    "Effluent treatment":[3.73,"R/kl","+6% p.a."],
+    "Groundwater treatment":[8.65,"R/kl","+9.4% p.a."],
+    "Purified water":[15.55,"R/kl","+9.4% p.a."],
+    "Water for injection":[332.76,"R/kl","+7.9% p.a."],
+};
+const TC_BREAKDOWN = [
+    ["Municipal tariff", 30.24, "#0891b2"],
+    ["Discharge tariff", 26.82, "#7c3aed"],
+    ["Treatment cost", 24.80, "#006838"],
+    ["Climate risk premium", 253.76, "#b91c1c"],
+];
+const TC_TOTAL = TC_BREAKDOWN.reduce((a,b)=>a+b[1],0);
+
+const INITIATIVES = [
+    { name:"Smart Metering &amp; Optimisation", capex:"R 2 m", yr:2027, blurb:"Sub-metering, leak detection and process optimisation across OSD &amp; SVP." },
+    { name:"Rainwater Harvesting", capex:"R 500 k", yr:2031, blurb:"Condensation + rainwater capture, 90% plant recovery, 54 kl/d offset." },
+    { name:"Additional Borehole (Groundwater)", capex:"R 15 m", yr:2026, blurb:"Second production borehole — adds 1 ML/d raw supply; WUL extended to 2050." },
+    { name:"Water Recovery Plant (WRP)", capex:"R 65 m", yr:2033, blurb:"Effluent treatment train, 850 kl/d capacity, 75% recovery, 31% offset." },
+    { name:"Desalination (North-End Lake)", capex:"R 52.5 m", yr:2040, blurb:"RO desalination of North-End Lake water — 1000 kl/d, 65% recovery." },
+];
+
+const DEMO_PASSWORD = "aspen2050";
+
+// =========================================================================
+// UTILS
+// =========================================================================
+function zar(n, dp=1){
+    if(!isFinite(n)) return "–";
+    const a = Math.abs(n);
+    if(a>=1e9) return "R "+(n/1e9).toFixed(dp)+" bn";
+    if(a>=1e6) return "R "+(n/1e6).toFixed(dp)+" m";
+    if(a>=1e3) return "R "+(n/1e3).toFixed(0)+" k";
+    return "R "+n.toFixed(0);
+}
+function n1(n){ return isFinite(n) ? n.toFixed(1) : "–"; }
+
+function activeReduction(year, rw, gw, wr, sm, desal){
+    let r=0;
+    if(sm && year>=2027) r+=0.08;
+    if(year>=2026) r+=gw/100;
+    if(year>=2031) r+=rw/100;
+    if(year>=2033) r+=wr/100;
+    if(desal && year>=2040) r+=0.32;
+    return Math.min(r,0.9);
+}
+
+function computeScenario(rw,gw,wr,sm,desal){
+    const rows=[]; let cum=0, cumBau=0, cumStrat=0;
+    const fullStack = sm && desal && rw>=10 && gw>=20 && wr>=40;
+    for (const y of YEARS){
+        const red = activeReduction(y,rw,gw,wr,sm,desal);
+        const bau = BAU_TRUE[y];
+        let strat = BAU_COST_RATIO[y] + BAU_RISK[y]*(1-red);
+        if(fullStack) strat = Math.min(strat, STRAT_TRUE[y]);
+        const annualKl = BAU_DAILY[y][0]*365;
+        const sav = Math.max(0,(bau-strat)*annualKl);
+        cum+=sav; cumBau+=bau*annualKl; cumStrat+=strat*annualKl;
+        rows.push({year:y, bau, strat, red:red*100, annualSav:sav, cumSav:cum});
+    }
+    return { rows, cum, cumBau, cumStrat, red2050: activeReduction(2050,rw,gw,wr,sm,desal)*100,
+             bau2050: BAU_TRUE[2050], strat2050: rows[rows.length-1].strat };
+}
+
+// =========================================================================
+// AUTH
+// =========================================================================
+function handleLogin(e){
+    e.preventDefault();
+    const pwd = document.getElementById('pwd').value.trim();
+    const err = document.getElementById('err');
+    if(pwd===DEMO_PASSWORD){
+        localStorage.setItem('aspen_demo_authed','1');
+        document.getElementById('gate').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        init();
+    } else {
+        err.classList.remove('hidden');
+        err.querySelector('span').textContent = "Invalid password. Please contact your WERC facilitator.";
+    }
+}
+function signOut(){
+    localStorage.removeItem('aspen_demo_authed');
+    document.getElementById('app').classList.add('hidden');
+    document.getElementById('gate').classList.remove('hidden');
+    document.getElementById('pwd').value='';
+}
+// Auto-resume
+if(localStorage.getItem('aspen_demo_authed')==='1'){
+    document.addEventListener('DOMContentLoaded',()=>{
+        document.getElementById('gate').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        init();
+    });
+}
+
+// =========================================================================
+// TAB NAV
+// =========================================================================
+function setTab(t){
+    ['overview','bau','truecost','simulator','savings'].forEach(k=>{
+        const sec = document.getElementById('tab-'+k);
+        const btn = document.querySelector(`[data-tab="${k}"]`);
+        if(k===t){ sec.classList.remove('hidden'); btn.classList.add('active'); }
+        else { sec.classList.add('hidden'); btn.classList.remove('active'); }
+    });
+    if(t==='bau' && !charts.bau) drawBau();
+    if(t==='truecost' && !charts.tc) { drawTc(); fillTariffs(); }
+    if(t==='simulator' && !charts.proj) drawSim();
+    if(t==='savings' && !charts.sav) drawSav();
+}
+
+// =========================================================================
+// CHARTS
+// =========================================================================
+const charts = {};
+
+function drawBau(){
+    const labels = YEARS;
+    const mun = labels.map(y=>BAU_DAILY[y][1]);
+    const gw  = labels.map(y=>BAU_DAILY[y][2]);
+    const demand = labels.map(y=>BAU_DAILY[y][0]);
+    const gwAvail = labels.map(y=>GW_AVAIL(y));
+
+    charts.bau = new Chart(document.getElementById('bauChart'),{
+        type:'bar',
+        data:{
+            labels,
+            datasets:[
+                {type:'bar', label:'Municipal', data:mun, backgroundColor:'#0891b2', stack:'s', borderRadius:2},
+                {type:'bar', label:'Groundwater', data:gw, backgroundColor:'#006838', stack:'s', borderRadius:2},
+                {type:'line', label:'Total demand', data:demand, borderColor:'#0b1f18', backgroundColor:'#0b1f18', borderWidth:2.5, pointRadius:2, tension:.25},
+                {type:'line', label:'GW availability', data:gwAvail, borderColor:'#b91c1c', borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:0, fill:false},
+            ]
+        },
+        options: chartOpts({ y:{title:{display:true,text:'kl/day', color:'#64748b'}, stacked:true}, x:{stacked:true} })
+    });
+}
+
+function drawTc(){
+    charts.tc = new Chart(document.getElementById('tcPie'),{
+        type:'doughnut',
+        data:{ labels: TC_BREAKDOWN.map(t=>t[0]),
+               datasets:[{ data: TC_BREAKDOWN.map(t=>t[1]), backgroundColor: TC_BREAKDOWN.map(t=>t[2]), borderWidth:0 }]},
+        options:{ cutout:'55%', plugins:{
+            legend:{ position:'bottom', labels:{ color:'#334155', font:{family:'Manrope',size:12}, usePointStyle:true }},
+            tooltip:{ backgroundColor:'#0b1f18', callbacks:{ label: c => `${c.label}: R ${c.parsed.toFixed(2)}/kl` } }
+        }}
+    });
+    // side list
+    const list = document.getElementById('tcList');
+    list.innerHTML = TC_BREAKDOWN.map(([n,v,c])=>{
+        const pct = (v/TC_TOTAL)*100;
+        return `<div class="card" style="padding:16px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:start">
+              <div style="display:flex;gap:12px;align-items:center">
+                <span class="droplet" style="background:${c}"></span>
+                <div><div style="font-weight:500">${n}</div><div style="font-size:11px;color:#64748b">${pct.toFixed(1)}% of true cost</div></div>
+              </div>
+              <div class="font-display" style="font-size:22px">R ${v.toFixed(1)}</div>
+            </div>
+            <div style="height:4px;background:#f1f5f9;border-radius:999px;margin-top:12px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${c}"></div></div>
+        </div>`;
+    }).join('');
+}
+function fillTariffs(){
+    document.getElementById('tariffGrid').innerHTML = Object.entries(TARIFFS).map(([k,[v,u,esc]])=>`
+        <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
+            <div class="metric-label" style="font-size:10px">${k}</div>
+            <div style="margin-top:4px" class="font-display" style="font-size:18px">R ${v.toFixed(2)} <span style="font-size:11px;color:#64748b;font-family:Manrope">${u}</span></div>
+            <div style="font-size:11px;color:#64748b;margin-top:4px">${esc}</div>
+        </div>`).join('');
+}
+
+function drawSim(){
+    charts.proj = new Chart(document.getElementById('projChart'),{
+        type:'line',
+        data:{ labels: YEARS, datasets:[
+            { label:'Business as Usual', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#b91c1c', backgroundColor:'rgba(185,28,28,0.12)', fill:true, tension:.3, pointRadius:0, borderWidth:2, order:2 },
+            { label:'Strategic', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#006838', backgroundColor:'rgba(0,104,56,0.25)', fill:'origin', tension:.3, pointRadius:0, borderWidth:2.5, order:1 },
+        ]},
+        options: chartOpts({ y:{ title:{display:true, text:'R/kl', color:'#64748b'}, beginAtZero:true } })
+    });
+    updateSim();
+
+    // Render initiatives
+    document.getElementById('initList').innerHTML = INITIATIVES.map(i=>`
+        <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
+            <div class="metric-label" style="font-size:10px">Initiative</div>
+            <div style="font-weight:500;margin-top:4px;line-height:1.2">${i.name}</div>
+            <div style="font-size:11px;color:#64748b;margin-top:10px">CAPEX</div>
+            <div class="font-display" style="font-size:16px">${i.capex}</div>
+            <div style="font-size:11px;color:#64748b;margin-top:6px">Impact year</div>
+            <div>${i.yr}</div>
+            <div style="font-size:11px;color:#475569;margin-top:10px;line-height:1.45">${i.blurb}</div>
+        </div>`).join('');
+}
+
+function drawSav(){
+    charts.sav = new Chart(document.getElementById('savChart'),{
+        data:{ labels: YEARS, datasets:[
+            { type:'bar', label:'Annual savings', data: [], backgroundColor:'#8dc63f', borderRadius:2, yAxisID:'y' },
+            { type:'line', label:'Cumulative savings', data: [], borderColor:'#006838', backgroundColor:'rgba(0,104,56,0.2)', fill:true, tension:.25, pointRadius:0, yAxisID:'y1' },
+        ]},
+        options:{ responsive:true, maintainAspectRatio:true,
+            plugins:{
+                legend:{ position:'bottom', labels:{color:'#334155',font:{family:'Manrope',size:12},usePointStyle:true} },
+                tooltip:{ backgroundColor:'#0b1f18', callbacks:{ label: c => `${c.dataset.label}: ${zar(c.parsed.y,2)}` } }
+            },
+            scales:{
+                x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}},
+                y:{ position:'left', grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}, callback:v=>zar(v,0)} },
+                y1:{ position:'right', grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}, callback:v=>zar(v,0)} },
+            }
+        }
+    });
+    updateSim();
+}
+
+function chartOpts(scales){
+    return {
+        responsive:true, maintainAspectRatio:true,
+        plugins:{
+            legend:{ position:'bottom', labels:{color:'#334155',font:{family:'Manrope',size:12},usePointStyle:true}},
+            tooltip:{ backgroundColor:'#0b1f18', borderColor:'rgba(255,255,255,.08)', titleColor:'#a7f3d0' }
+        },
+        scales: { x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}, ...(scales.x||{}) },
+                  y:{ grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}, ...(scales.y||{}) } }
+    };
+}
+
+// =========================================================================
+// SIMULATOR STATE
+// =========================================================================
+function updateSim(){
+    const rw = +document.getElementById('rwSlider').value;
+    const gw = +document.getElementById('gwSlider').value;
+    const wr = +document.getElementById('wrSlider').value;
+    const sm = document.getElementById('smToggle').checked;
+    const desal = document.getElementById('desalToggle').checked;
+
+    // slider fills
+    document.getElementById('rwSlider').style.setProperty('--pct', (rw/30)*100+'%');
+    document.getElementById('gwSlider').style.setProperty('--pct', (gw/50)*100+'%');
+    document.getElementById('wrSlider').style.setProperty('--pct', (wr/70)*100+'%');
+
+    document.getElementById('rwVal').innerHTML = rw+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
+    document.getElementById('gwVal').innerHTML = gw+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
+    document.getElementById('wrVal').innerHTML = wr+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
+
+    const s = computeScenario(rw,gw,wr,sm,desal);
+
+    // Projection chart
+    if(charts.proj){
+        charts.proj.data.datasets[1].data = s.rows.map(r=>r.strat);
+        charts.proj.update('none');
+    }
+    // Savings chart
+    if(charts.sav){
+        charts.sav.data.datasets[0].data = s.rows.map(r=>r.annualSav);
+        charts.sav.data.datasets[1].data = s.rows.map(r=>r.cumSav);
+        charts.sav.update('none');
+    }
+
+    // KPIs simulator
+    document.getElementById('reducVal').textContent = s.red2050.toFixed(0)+'%';
+    document.getElementById('kpiRed').textContent = s.red2050.toFixed(0)+'%';
+    document.getElementById('kpiTcw').innerHTML = n1(s.strat2050)+' <span style="font-size:12px;color:#64748b;font-family:Manrope">R/kl</span>';
+    document.getElementById('kpiBau').textContent = zar(s.cumBau,1);
+    document.getElementById('kpiSav').textContent = zar(s.cum,2);
+    document.getElementById('simHeroSavings').textContent = zar(s.cum,2);
+    document.getElementById('simHeroBau').textContent = 'vs BaU '+zar(s.cumBau,1);
+
+    // Savings view
+    document.getElementById('savHero').textContent = zar(s.cum,2);
+    document.getElementById('sumBau').textContent  = zar(s.cumBau,1);
+    document.getElementById('sumStrat').textContent= zar(s.cumStrat,1);
+    document.getElementById('sumSav').textContent  = zar(s.cum,2);
+}
+
+function init(){
+    lucide.createIcons();
+    ['rwSlider','gwSlider','wrSlider','smToggle','desalToggle'].forEach(id=>{
+        document.getElementById(id).addEventListener('input', updateSim);
+        document.getElementById(id).addEventListener('change', updateSim);
+    });
+    // initial slider fills
+    document.getElementById('rwSlider').style.setProperty('--pct','33.3%');
+    document.getElementById('gwSlider').style.setProperty('--pct','40%');
+    document.getElementById('wrSlider').style.setProperty('--pct','57.1%');
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+/* Aspen dashboard helper overrides */
+.recharts-default-tooltip {
+    background: #0b1f18 !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 10px !important;
+    color: #f7fff9 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
+}
+.recharts-tooltip-label { color: #a7f3d0 !important; font-weight: 600 !important; }
+.recharts-tooltip-item { color: #f7fff9 !important; }
+
+.recharts-cartesian-axis-tick-value {
+    font-size: 11px;
+    fill: #475569;
+    font-family: 'Manrope', sans-serif;
+}
+.recharts-legend-item-text {
+    color: #334155 !important;
+    font-size: 12px !important;
+}
+.recharts-cartesian-grid line { stroke: #e2e8f0; }

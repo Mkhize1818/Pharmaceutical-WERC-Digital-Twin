@@ -1,0 +1,350 @@
+Total slides: 48
+================================================================================
+
+--- SLIDE 2 ---
+Water Efficiency & Risk Check
+Aspen Operations SA (
+Gqeberha
+)
+1002727
+15 August 2025
+
+--- SLIDE 3 ---
+Contents
+Introductions
+Objectives of the study
+South African Water Crisis
+Aspen History
+Key Risks and Drivers
+Site Assessment
+Risk Profiling: Business as Usual
+Initiatives and High-Level CAPEX Estimates
+Risk Profiling: Strategic Outlook
+Results of Study:
+BaU
+vs Strategic
+Way Forward
+
+--- SLIDE 4 ---
+Introductions
+A subsidiary of KFW, providing advisory services & funding solutions to companies for their investments in developing and emerging countries
+A global specialty and branded pharmaceutical company committed to improving the health and quality of life of patients
+A multidisciplinary business providing sustainable water solutions
+
+--- SLIDE 5 ---
+objectives
+Key Objectives of WERC Study
+
+--- SLIDE 6 ---
+The South African Water Crisis
+Crisis at the Catchment Level
+
+--- SLIDE 7 ---
+Water risk assessment
+Potential Catchment Risks Highlighted Which Could Affect Aspen’s Site
+Physical Risk Quantity | Rating
+Baseline Water Stress | High
+Baseline Water Depletion | Low – Medium
+Interannual Variability | High
+Seasonal Variability | Low
+Groundwater Table Decline | Insignificant Trend
+Riverine Flood Risk | High
+Coastal Flood Risk | Low
+Drought Risk | Medium
+Physical Risk Quality | 
+Untreated Connected Wastewater | Medium – High
+Coastal Eutrophication Potential | High
+Physical Risk Quality | 
+Unimproved / No Drinking Water | Low
+Unimproved / No Sanitation | Medium – High
+Peak RepRisk Country ESG Risk Index | Low - Medium
+Aspen’s Port Elizabeth facility is located in the
+Mzimbvubu
+-Tsitsikamma
+Water Management Area (WMA)
+It lies in the
+Sondags
+(Sundays) Catchment
+, part of the
+South Coast Basin
+Water-Stressed region
+, with risk levels projected to rise to ‘
+extremely high
+’
+by 2050
+
+--- SLIDE 8 ---
+External risks
+NMBM Water Supply & Usage Statistics
+
+--- SLIDE 9 ---
+Catchment water stress
+Current Catchment Risks Contributing to Aspen’s Water Risk
+
+--- SLIDE 10 ---
+External risks
+Future Impact of Water Quality and Volume on Aspen’s PE Site
+NMBM 85ML/day OVER TARGET!
+
+--- SLIDE 11 ---
+Aspen
+Gqeberha
+history
+Water and Production Timeline
+
+--- SLIDE 12 ---
+Site Assessment
+Overview of Aspen’s PE Operations
+Oral Solid Dose Manufacturing
+Small Volume Parenteral Manufacturing
+
+--- SLIDE 13 ---
+Site Assessment
+Site Water Balance
+This accounts for:
+WTP Upgrade (75% recovery)
+Additional BH (1 ML/d)
+NH3 Plant (827 kl/d)
+SVP3 (+33%)
+
+--- SLIDE 14 ---
+Key risks and drivers
+Drivers for the Aspen SA Operations (
+Gqeberha
+)
+Increased Capacity
+Of the Production Process (SVP3), Increase in Water Usage
+Climate
+Long-Term Water Supply During Periods of Drought
+Water Security
+Future Supply, Quality and Regulations
+4
+3
+1
+Effluent Discharge
+2
+Quality and Regulations of effluent Discharge to Municipality
+
+--- SLIDE 15 ---
+Business as usual scenario summary
+Key Assumptions & Sensitivity
+
+--- SLIDE 16 ---
+BUSINESS AS USUAL scenarios
+SCENARIO 4 – Additional BH, WUL extended to 2050
+
+--- SLIDE 17 ---
+BUSINESS AS USUAL scenarios
+SCENARIO 2 – No additional BH, WUL extended to 2050
+NH3 Plant
+SVP3
+Max. production/demand
+
+--- SLIDE 18 ---
+BUSINESS AS USUAL scenarios
+SCENARIO 3 – Additional BH, WUL expires 2040
+NH3 Plant
+SVP3
+Max. production/demand
+2
+nd
+BH
+Groundwater availability < Demand
+WUL expires
+
+--- SLIDE 19 ---
+BUSINESS AS USUAL scenarios
+SCENARIO 4 – Additional BH, WUL extended to 2050
+NH3 Plant
+SVP3
+Max. production/demand
+2
+nd
+BH
+Groundwater availability < Demand
+
+--- SLIDE 20 ---
+Risk Profiling Model: 2025 to 2050
+Key Assumptions & Sensitivity
+
+--- SLIDE 21 ---
+Risk Profiling – Business As Usual Outlook
+Operational Water Cost Ratio – Cost of potable water supply and discharge per kl of water consumed
+243.66
+198.77
+
+--- SLIDE 22 ---
+Risk Profiling – Business As Usual Outlook
+Operational Water Cost Ratio – Cost of potable water supply and discharge per kl of water consumed
+
+--- SLIDE 24 ---
+WATER-RELATED INITIATIVES
+
+--- SLIDE 25 ---
+Proposed water initiatives
+Solutions to achieve:
+
+--- SLIDE 26 ---
+Initiative 1
+Smart Metering & Optimisation
+*The costs are conceptual, based on certain assumptions
+CAPEX:
+R2m
+Water Reuse Opportunity:
+Brine and Blowdown
+Potential Savings:
+10% of current consumption and subsequent ww discharge
+
+--- SLIDE 27 ---
+Initiative 2
+Proposed Condensation & Rainwater Harvesting System
+*The Design and costs are conceptual, based on certain assumptions
+CAPEX:
+R500K
+Plant recovery:
+90%
+Max volume offset:
+54 kl/d (3%)
+
+--- SLIDE 28 ---
+Initiative 3
+Increase Storage Capacity of Treated Water
+*The Design and costs are conceptual, based on certain assumptions
+CAPEX:
+R1 m
+Benefit:
+Increase total site storage to 2450m3 (2.2 days buffer supply)
+
+--- SLIDE 29 ---
+Initiative 4
+Proposed Effluent Treatment Train for a Water Recovery Plant
+*The Design and costs are conceptual, based on certain assumptions
+CAPEX:
+R65 m
+Plant Capacity:
+850 kl/d
+Plant Recovery:
+75%
+Volume offset:
+637 kl/d (31%)
+
+--- SLIDE 30 ---
+Initiative 5
+Proposed Desalination of North End Lake Abstracted Water
+*The Design and costs are conceptual, based on certain assumptions
+CAPEX:
+R52.5 m
+Plant Capacity:
+1000 kl/d
+Plant Recovery:
+65%
+Volume offset:
+650 kl/d (32%)
+
+--- SLIDE 31 ---
+Strategic Benefits of Initiatives
+Objective | Smart Metering & Optimisation | Storage Capacity | Rainwater Harvesting | Water Recovery | Desalination
+Mitigate Production Risk |  |  |  |  | 
+Independence from Municipal Water |  |  |  |  | 
+Reduce Wastewater Volume/Cost |  |  |  |  | 
+CAPEX |  |  |  |  | 
+OPEX |  |  |  |  | 
+Stewardship |  |  |  |  | 
+
+--- SLIDE 32 ---
+WATER RISK PROFILE
+BUSINESS AS USUAL
+
+--- SLIDE 33 ---
+Risk Profiling – Business as Usual Outlook
+Daily Water Demand, Availability and Consumption by Source
+
+--- SLIDE 34 ---
+Risk Profiling - Business As Usual Outlook
+True Value of Water: Operational Costs and Water Risk Exposure
+
+--- SLIDE 35 ---
+WATER RISK PROFILE
+STRATEGIC OUTLOOK
+
+--- SLIDE 36 ---
+Risk Profiling – Business as Usual Outlook
+Daily Water Demand, Availability and Consumption by Source
+
+--- SLIDE 37 ---
+Strategic Scenarios
+SCENARIO 1 - WUL Extended, Rainwater Harvesting, no WRP, no Desal
+
+--- SLIDE 38 ---
+Strategic Scenarios
+SCENARIO 2 - Rainwater Harvesting, WRP, WUL extended, no Desal
+NH3
+Rainwater
+SVP3
+WRP
+BH2
+Metering & Optimisation
+
+--- SLIDE 39 ---
+Strategic Scenarios
+SCENARIO 3 - Rainwater Harvesting, WRP, WUL expires, no Desal
+NH3
+Rainwater
+SVP3
+WRP
+Max. Production
+BH2
+Metering & Optimisation
+Alternate
+water availability < Demand
+WUL expires
+
+--- SLIDE 40 ---
+Water risk strategy
+Roadmap for Implementation of Water Risk Strategy
+
+--- SLIDE 41 ---
+Risk Profiling – Strategic Outlook
+Daily Water Demand, Availability and Consumption by Source
+NH3
+Rainwater
+SVP3
+WRP
+Max. Production
+Desal
+WUL expires
+BH2
+Metering & Optimisation
+Alternate water availability < Demand
+
+--- SLIDE 42 ---
+Risk Profiling – Strategic Outlook
+Operational Water Cost Ratio – Cost of potable water supply and discharge per kl of water consumed
+WRP
+244
+169
+194
+
+--- SLIDE 43 ---
+Risk Profiling – Strategic Outlook
+True Value of Water: Operational Costs and Water Risk Exposure
+
+--- SLIDE 44 ---
+BaU
+vs Strategic Outlook
+Comparison of operational cost and risk exposure
+
+--- SLIDE 45 ---
+BaU
+vs Strategic Outlook
+Cumulative Operational Water Costs
+ZAR 69 million SAVINGS!
+
+--- SLIDE 46 ---
+NEXT STEPS
+
+--- SLIDE 47 ---
+Further considerations
+Proposed short and long-term actions for Aspen
+Short-Term
+Long-Term
