@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import {
     AreaChart, Area, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
@@ -8,7 +10,7 @@ import {
 import {
     Droplets, Gauge, TrendingDown, TrendingUp, Shield, Building2,
     Factory, ArrowRight, Waves, Sun, Recycle, Wrench, LockKeyhole,
-    LogOut, AlertTriangle, CheckCircle2, BarChart3,
+    LogOut, AlertTriangle, CheckCircle2, BarChart3, FileDown, Loader2,
 } from "lucide-react";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -678,6 +680,8 @@ function Dashboard() {
     const [projection, setProjection] = useState(null);
     const [initiatives, setInitiatives] = useState(null);
     const [scenario, setScenario] = useState(null);
+    const [exporting, setExporting] = useState(false);
+    const [exportStatus, setExportStatus] = useState("");
 
     useEffect(() => {
         if (!authed) return;
@@ -692,6 +696,137 @@ function Dashboard() {
             setSite(a.data); setBau(b.data); setTc(c.data); setProjection(d.data); setInitiatives(e.data.initiatives);
         })();
     }, [authed]);
+
+    const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+    const downloadPDF = async () => {
+        if (exporting) return;
+        setExporting(true);
+        try {
+            // A4 landscape: 297 x 210 mm
+            const pdf = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+            const W = 297, H = 210;
+
+            // --- COVER PAGE ---
+            setExportStatus("Building cover…");
+            pdf.setFillColor(11, 31, 24);               // ink
+            pdf.rect(0, 0, W, H, "F");
+            pdf.setFillColor(0, 74, 40);                // aspen-green-deep accent strip
+            pdf.rect(0, 0, W, 3, "F");
+
+            // Logo (load as image)
+            try {
+                const logoImg = await loadImage("/talbot-logo.png");
+                const lw = 28, lh = 28;
+                pdf.addImage(logoImg, "PNG", 18, 18, lw, lh);
+            } catch (_) { /* ignore logo load failure */ }
+
+            pdf.setTextColor(167, 243, 208);
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(10);
+            pdf.text("DIGITAL TWIN", 18, 62, { charSpace: 1.8 });
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(22);
+            pdf.text("WERC", 18, 72);
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(40);
+            pdf.setTextColor(255, 255, 255);
+            pdf.text("Water risk,", 18, 110);
+            pdf.setTextColor(141, 198, 63);            // lime
+            pdf.setFont("helvetica", "italic");
+            pdf.text("quantified.", 18, 128);
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(12);
+            pdf.setTextColor(220, 235, 225);
+            const subtitle = site?.name ? `${site.name} · WERC Feedback Study (15 August 2025)` : "WERC Feedback Study";
+            pdf.text(subtitle, 18, 146);
+            pdf.setFontSize(10);
+            pdf.setTextColor(141, 198, 63);
+            pdf.text("Business-as-Usual exposure · Strategic outlook · 2025 – 2050", 18, 154);
+
+            // Footer on cover
+            pdf.setFontSize(9);
+            pdf.setTextColor(120, 160, 140);
+            pdf.text("Confidential · Prepared by Talbot · DWFM × KfW-IPEX", 18, H - 14);
+            pdf.text(new Date().toLocaleDateString("en-ZA", { year:"numeric", month:"long", day:"numeric" }), W - 18, H - 14, { align: "right" });
+
+            // --- CONTENT PAGES: cycle through each tab ---
+            const tabsToExport = [
+                { k: "overview",  title: "Overview" },
+                { k: "bau",       title: "BAU supply/demand" },
+                { k: "truecost",  title: "True cost of water · 2025" },
+                { k: "simulator", title: "Strategic simulator" },
+                { k: "savings",   title: "Cumulative savings · 2025 – 2050" },
+            ];
+
+            const originalTab = tab;
+            for (let i = 0; i < tabsToExport.length; i++) {
+                const t = tabsToExport[i];
+                setExportStatus(`Rendering ${t.title}…`);
+                setTab(t.k);
+                await wait(t.k === "simulator" ? 1400 : 900);   // allow charts to fully animate in
+
+                // Capture the <main> region
+                const main = document.querySelector("main");
+                if (!main) continue;
+                const canvas = await html2canvas(main, {
+                    scale: 2,
+                    backgroundColor: "#fafaf7",
+                    useCORS: true,
+                    logging: false,
+                    windowWidth: main.scrollWidth,
+                });
+                const imgData = canvas.toDataURL("image/jpeg", 0.92);
+
+                pdf.addPage("a4", "landscape");
+                // Header strip on each content page
+                pdf.setFillColor(250, 250, 247);
+                pdf.rect(0, 0, W, H, "F");
+                pdf.setFillColor(0, 104, 56);
+                pdf.rect(0, 0, W, 3, "F");
+                // Page title
+                pdf.setFont("helvetica", "normal");
+                pdf.setFontSize(8);
+                pdf.setTextColor(100, 116, 139);
+                pdf.text("WERC DIGITAL TWIN", 15, 10);
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(11);
+                pdf.setTextColor(11, 31, 24);
+                pdf.text(t.title, 15, 15);
+                pdf.setFont("helvetica", "normal");
+                pdf.setFontSize(8);
+                pdf.setTextColor(100, 116, 139);
+                pdf.text(`${i + 2} / ${tabsToExport.length + 1}`, W - 15, 10, { align: "right" });
+
+                // Fit canvas into page, preserving aspect
+                const availW = W - 20, availH = H - 28;
+                const ratio = canvas.width / canvas.height;
+                let imgW = availW, imgH = availW / ratio;
+                if (imgH > availH) { imgH = availH; imgW = availH * ratio; }
+                const x = (W - imgW) / 2;
+                const y = 22;
+                pdf.addImage(imgData, "JPEG", x, y, imgW, imgH, undefined, "FAST");
+
+                // Footer
+                pdf.setFontSize(7);
+                pdf.setTextColor(148, 163, 184);
+                pdf.text("Confidential · Prepared by Talbot", 15, H - 6);
+            }
+
+            setTab(originalTab);
+            setExportStatus("Saving PDF…");
+            pdf.save(`WERC-Water-Digital-Twin-${new Date().toISOString().slice(0,10)}.pdf`);
+        } catch (e) {
+            console.error(e);
+            alert("PDF export failed: " + e.message);
+        } finally {
+            setExportStatus("");
+            setExporting(false);
+        }
+    };
 
     if (!authed) return <Gate onUnlock={() => setAuthed(true)} />;
 
@@ -709,8 +844,19 @@ function Dashboard() {
                         <div className="text-[10px] uppercase tracking-[0.24em] text-slate-500">Digital Twin</div>
                         <div className="font-display font-semibold text-xl leading-tight text-[var(--aspen-green-deep)]">WERC</div>
                     </div>
-                    {/* Right: Sign out */}
-                    <div className="justify-self-end">
+                    {/* Right: Download PDF + Sign out */}
+                    <div className="justify-self-end flex items-center gap-2">
+                        <button
+                            onClick={downloadPDF}
+                            disabled={exporting}
+                            className="btn-primary flex items-center gap-2 text-sm disabled:opacity-70"
+                            data-testid="download-pdf-btn"
+                            style={{ padding: "0.55rem 0.9rem" }}
+                        >
+                            {exporting
+                                ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> {exportStatus || "Exporting…"}</>
+                                : <><FileDown className="w-3.5 h-3.5" /> Download PDF</>}
+                        </button>
                         <button onClick={() => { localStorage.removeItem("aspen_token"); setAuthed(false); }} className="btn-ghost flex items-center gap-2 text-sm" data-testid="logout-btn">
                             <LogOut className="w-3.5 h-3.5" /> Sign out
                         </button>
@@ -734,8 +880,34 @@ function Dashboard() {
             <footer className="border-t border-[#e8e8e1] py-6 text-center text-xs text-slate-400 mt-16">
                 WERC Water Digital Twin · Model data: Water Model v6 (Aug 2025) · Demo build by Talbot
             </footer>
+
+            {exporting && (
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center" data-testid="export-overlay">
+                    <div className="card p-8 max-w-sm text-center">
+                        <Loader2 className="w-8 h-8 animate-spin text-[var(--aspen-green)] mx-auto mb-3" />
+                        <div className="font-display text-xl font-medium mb-1">Building your PDF</div>
+                        <div className="text-sm text-slate-500">{exportStatus || "Please hold…"}</div>
+                    </div>
+                </div>
+            )}
         </div>
     );
+}
+
+// Helper: load /talbot-logo.png as a dataURL for jsPDF
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+            const c = document.createElement("canvas");
+            c.width = img.naturalWidth; c.height = img.naturalHeight;
+            c.getContext("2d").drawImage(img, 0, 0);
+            resolve(c.toDataURL("image/png"));
+        };
+        img.onerror = reject;
+        img.src = src;
+    });
 }
 
 export default function App() {

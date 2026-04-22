@@ -1,0 +1,36 @@
+{
+  "summary": "Frontend-only re-test focused on PDF export + Aspen→Pharmaceutical rebrand. React app (https://aqua-savings-sim.preview.emergentagent.com) and standalone /standalone.html both gate on aspen2050, render Talbot logo (left) + 'DIGITAL TWIN / WERC' (center) + Download PDF + Sign out (right), and produce valid 6-page landscape A4 PDFs (~1.4–1.7 MB) named 'WERC-Water-Digital-Twin-2026-04-22.pdf'. Export overlay (data-testid='export-overlay') appears during build and disappears afterwards; button re-enables. All 5 tabs navigable; sign-out returns to gate; wrong password shows 'Invalid password. Please contact your WERC facilitator.' One rebrand leak found: visible chip on True cost tab still reads 'Source · Aspen Model v6 · Inputs'.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "TrueCostTab tariff table chip",
+        "issue": "Visible UI string still references 'Aspen' — chip reads 'Source · Aspen Model v6 · Inputs'. Violates the rebrand requirement ('no Aspen mentions anywhere in the visible UI'). Located on the True cost tab next to 'Underlying tariffs & escalation (2025)'.",
+        "selector": "[data-testid='tariff-table'] .chip  (file: /app/frontend/src/App.js line 388)",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_aspen_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Replace the 'Source · Aspen Model v6 · Inputs' chip text in /app/frontend/src/App.js line 388 with a non-branded label (e.g. 'Source · Water Model v6 · Inputs') so the React UI is fully rebranded — standalone footer/text already uses 'Water Model v6'."
+  ],
+  "critical_code_review_comments": [
+    "App.js is now 916 lines (was 742); still violates the >700-line guideline. Recommend extracting downloadPDF() helper and the per-tab components into separate files.",
+    "downloadPDF() in App.js mutates `tab` state mid-export to force each tab to render before html2canvas capture; if the user clicks any tab while exporting the loop will race. Consider disabling the tab bar (or wrapping in an off-screen render) while `exporting` is true.",
+    "Both downloadPDF implementations swallow per-tab capture errors silently (`if (!main) continue;`). If one tab fails the PDF is silently shorter. Suggest at minimum logging or surfacing the partial-export warning in the overlay status.",
+    "loadImage() in App.js (lines 898-911) uses crossOrigin='anonymous' against a same-origin asset; harmless but the silent catch around it (line 718-722) means a logo failure produces a coverless cover page with no diagnostic. Add a console.warn.",
+    "html2canvas captures with scale=2 and the simulator/savings tabs include large Recharts SVGs — on lower-memory clients this may OOM. Consider scale: window.devicePixelRatio or a 1.5 cap.",
+    "Both PDFs rely on a wall-clock wait (900–1400 ms) for chart animations. If Recharts animations are delayed (slow CPU) the captured chart may still be tweening. Better: disable Recharts animation during export (`isAnimationActive={false}` while `exporting`)."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "100% (re-used iteration_1 results, no regressions observed)", "frontend": "95% (all functionality works; one visible-text rebrand miss)" },
+  "test_credentials": "Demo password: aspen2050 (still working; gate also rejects wrong password with the expected error message)",
+  "seed_data_creation": "None — used existing in-code static data.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "PDF flow verified end-to-end: React PDF was 1,677,257 bytes / 6 pages; standalone PDF was 1,467,224 bytes / 6 pages. Filename pattern: WERC-Water-Digital-Twin-YYYY-MM-DD.pdf. Both expose the export overlay (React: data-testid='export-overlay'; standalone: button#pdfBtn becomes disabled). Visible-text 'Aspen' scan over all 5 React tabs returned hits ONLY on True cost tab: 'Source · Aspen Model v6 · Inputs' (App.js:388). Standalone scan returned 0 hits. CSS variables/class names like --aspen-green are not user-visible and don't count.",
+  "rca of the issue": "When the app was rebranded from 'Aspen' to 'Pharmaceutical Company / WERC', the chip label inside the True cost tab tariff card was missed because the text is hardcoded in JSX (App.js:388) rather than driven by the SITE_INFO/site.name field. Fix: change the literal string to 'Source · Water Model v6 · Inputs' (matches the standalone build and the dashboard footer)."
+}
