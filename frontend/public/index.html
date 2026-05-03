@@ -21,7 +21,28 @@
         work correctly both with client-side routing and a non-root public URL.
         Learn how to configure a non-root public URL by running `npm run build`.
         -->
-        <title>Emergent | Fullstack App</title>
+        <title>WERC Water Digital Twin · Talbot</title>
+        <style>
+            /* Aktiv Grotesk — drop the actual font files at /fonts/ to override Hanken Grotesk.
+               Until those files are uploaded the @font-face silently fails and the
+               browser falls through to Hanken Grotesk (Google Fonts). */
+            @font-face {
+                font-family: 'Aktiv Grotesk';
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+                src: url('/fonts/AktivGrotesk-Regular.woff2') format('woff2'),
+                     url('/fonts/AktivGrotesk-Regular.woff')  format('woff');
+            }
+            @font-face {
+                font-family: 'Aktiv Grotesk';
+                font-weight: 300;
+                font-style: normal;
+                font-display: swap;
+                src: url('/fonts/AktivGrotesk-Light.woff2') format('woff2'),
+                     url('/fonts/AktivGrotesk-Light.woff')  format('woff');
+            }
+        </style>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
         <script src="https://assets.emergent.sh/scripts/emergent-main.js"></script>
     </head>

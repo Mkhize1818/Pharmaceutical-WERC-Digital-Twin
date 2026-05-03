@@ -4,62 +4,70 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>WERC Water Digital Twin</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <style>
+@font-face { font-family:'Aktiv Grotesk'; font-weight:400; font-style:normal; font-display:swap;
+    src: url('/fonts/AktivGrotesk-Regular.woff2') format('woff2'),
+         url('/fonts/AktivGrotesk-Regular.woff')  format('woff'); }
+@font-face { font-family:'Aktiv Grotesk'; font-weight:300; font-style:normal; font-display:swap;
+    src: url('/fonts/AktivGrotesk-Light.woff2') format('woff2'),
+         url('/fonts/AktivGrotesk-Light.woff')  format('woff'); }
+
 :root{
-    --aspen-green:#006838; --aspen-green-deep:#004a28; --aspen-lime:#8dc63f;
-    --water-blue:#0891b2; --water-blue-deep:#0e7490;
-    --ink:#0b1f18; --slate:#334155; --paper:#fafaf7; --card:#fff;
-    --warn:#d97706; --danger:#b91c1c;
+    --brand-primary:#1171B8; --brand-deep:#062C60; --brand-teal:#163F56; --brand-sky:#C9E0EF;
+    --aspen-green:#1171B8; --aspen-green-deep:#062C60; --aspen-lime:#C9E0EF;
+    --water-blue:#163F56; --water-blue-deep:#062C60;
+    --ink:#062C60; --slate:#334155; --paper:#F6F8FB; --card:#fff;
+    --warn:#C4651E; --danger:#9D2C2C;
 }
 *{box-sizing:border-box} html,body{margin:0;padding:0;height:100%}
 body{
-    font-family:'Manrope',ui-sans-serif,system-ui,sans-serif;
+    font-family:'Aktiv Grotesk','Hanken Grotesk',ui-sans-serif,system-ui,sans-serif;
     color:var(--ink); background:var(--paper);
-    -webkit-font-smoothing:antialiased;
+    -webkit-font-smoothing:antialiased; font-weight:400;
     background-image:
-        radial-gradient(rgba(0,104,56,0.04) 1px,transparent 1px),
-        radial-gradient(rgba(0,104,56,0.03) 1px,transparent 1px);
+        radial-gradient(rgba(17,113,184,0.05) 1px,transparent 1px),
+        radial-gradient(rgba(17,113,184,0.04) 1px,transparent 1px);
     background-size:40px 40px,20px 20px;
     background-position:0 0,20px 20px;
 }
-.font-display{font-family:'Fraunces',serif;font-optical-sizing:auto;letter-spacing:-0.01em}
+.font-display{font-family:'Aktiv Grotesk','Hanken Grotesk',sans-serif;font-weight:600;letter-spacing:-0.015em}
 .container{max-width:1280px;margin:0 auto;padding:0 24px}
-.card{background:var(--card);border:1px solid #e8e8e1;border-radius:14px;box-shadow:0 1px 2px rgba(11,31,24,.04);transition:.2s}
-.card:hover{box-shadow:0 6px 24px rgba(11,31,24,.08)}
-.card-dark{background:linear-gradient(140deg,#0b1f18 0%,#12372a 60%,#0e7490 180%);color:#f7fff9;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,74,40,.25)}
+.card{background:var(--card);border:1px solid #E2EAF1;border-radius:14px;box-shadow:0 1px 2px rgba(6,44,96,.05);transition:.2s}
+.card:hover{box-shadow:0 6px 24px rgba(6,44,96,.10)}
+.card-dark{background:linear-gradient(140deg,#062C60 0%,#163F56 55%,#1171B8 180%);color:#F6FBFF;border-radius:14px;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(6,44,96,.30)}
 
-.btn-primary{background:var(--aspen-green);color:#fff;padding:.65rem 1.1rem;border:0;border-radius:10px;font:600 14px 'Manrope';cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:.5rem}
-.btn-primary:hover{background:var(--aspen-green-deep);transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--aspen-green);border:1px solid #d7d7cc;padding:.55rem 1rem;border-radius:10px;font:500 13px 'Manrope';cursor:pointer}
-.btn-ghost:hover{border-color:var(--aspen-green);background:rgba(0,104,56,.04)}
+.btn-primary{background:var(--brand-primary);color:#fff;padding:.65rem 1.1rem;border:0;border-radius:10px;font:600 14px 'Aktiv Grotesk','Hanken Grotesk';cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 2px 0 var(--brand-deep)}
+.btn-primary:hover{background:#0E5F9B;transform:translateY(-1px);box-shadow:0 4px 0 var(--brand-deep)}
+.btn-ghost{background:transparent;color:var(--brand-deep);border:1px solid #CFD9E2;padding:.55rem 1rem;border-radius:10px;font:500 13px 'Aktiv Grotesk','Hanken Grotesk';cursor:pointer;transition:.16s}
+.btn-ghost:hover{border-color:var(--brand-primary);background:rgba(17,113,184,.10);color:var(--brand-primary)}
 
-.chip{display:inline-flex;align-items:center;gap:.4rem;font:600 11px 'Manrope';letter-spacing:.04em;text-transform:uppercase;padding:.25rem .6rem;border-radius:999px;background:rgba(0,104,56,.08);color:var(--aspen-green-deep)}
-.chip-warn{background:rgba(217,119,6,.1);color:var(--warn)}
-.chip-danger{background:rgba(185,28,28,.1);color:var(--danger)}
-.chip-blue{background:rgba(8,145,178,.1);color:var(--water-blue-deep)}
+.chip{display:inline-flex;align-items:center;gap:.4rem;font:600 11px 'Aktiv Grotesk','Hanken Grotesk';letter-spacing:.04em;text-transform:uppercase;padding:.25rem .6rem;border-radius:999px;background:rgba(17,113,184,.10);color:var(--brand-deep)}
+.chip-warn{background:rgba(196,101,30,.10);color:var(--warn)}
+.chip-danger{background:rgba(157,44,44,.10);color:var(--danger)}
+.chip-blue{background:rgba(22,63,86,.10);color:var(--brand-teal)}
 
-.metric-value{font-family:'Fraunces',serif;font-weight:500;font-size:2.2rem;letter-spacing:-.02em;line-height:1}
-.metric-label{font:600 12px 'Manrope';text-transform:uppercase;letter-spacing:.08em;color:var(--slate)}
+.metric-value{font-family:'Aktiv Grotesk','Hanken Grotesk',sans-serif;font-weight:600;font-size:2.1rem;letter-spacing:-.025em;line-height:1;color:var(--brand-deep)}
+.metric-label{font:600 12px 'Aktiv Grotesk','Hanken Grotesk';text-transform:uppercase;letter-spacing:.08em;color:var(--slate)}
 
-input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--aspen-green) var(--pct,20%),#e5e5dc var(--pct,20%));outline:none;margin:0}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--aspen-green);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15)}
-input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--aspen-green);cursor:pointer}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:999px;background:linear-gradient(90deg,var(--brand-primary) var(--pct,20%),#DEE6EE var(--pct,20%));outline:none;margin:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--brand-primary);cursor:pointer;box-shadow:0 2px 6px rgba(6,44,96,.20)}
+input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;background:#fff;border:3px solid var(--brand-primary);cursor:pointer}
 
 .switch{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
 .switch input{opacity:0;width:0;height:0}
-.switch .track{position:absolute;inset:0;cursor:pointer;background:#cbd5e1;border-radius:999px;transition:.2s}
-.switch .track:before{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.switch input:checked + .track{background:var(--aspen-green)}
+.switch .track{position:absolute;inset:0;cursor:pointer;background:#CFD9E2;border-radius:999px;transition:.2s}
+.switch .track:before{content:'';position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(6,44,96,.25)}
+.switch input:checked + .track{background:var(--brand-primary)}
 .switch input:checked + .track:before{transform:translateX(18px)}
 
-.tab{padding:.7rem 1rem;border-radius:10px;font-weight:500;color:var(--slate);cursor:pointer;border:1px solid transparent;background:transparent;transition:.16s;font-size:14px;font-family:'Manrope';white-space:nowrap}
-.tab:hover{color:var(--aspen-green-deep);background:rgba(0,104,56,.04)}
-.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab{padding:.65rem 1rem;border-radius:10px;font-weight:500;color:var(--slate);cursor:pointer;border:1px solid transparent;background:transparent;transition:.16s;font-size:14px;font-family:'Aktiv Grotesk','Hanken Grotesk';white-space:nowrap}
+.tab:hover{color:var(--brand-deep);background:rgba(17,113,184,.10)}
+.tab.active{background:var(--brand-deep);color:#fff;border-color:var(--brand-deep)}
 
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fade-up{animation:fu .5s ease both}
@@ -72,17 +80,17 @@ input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;bac
 @media (max-width:900px){ .grid-3,.grid-4,.grid-5{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:560px){ .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr} }
 
-.hero-gradient{background:radial-gradient(ellipse at top right,rgba(8,145,178,.15) 0%,transparent 60%),radial-gradient(ellipse at top left,rgba(0,104,56,.12) 0%,transparent 55%),linear-gradient(180deg,#fafaf7 0%,#f3f3ec 100%)}
+.hero-gradient{background:radial-gradient(ellipse at top right,rgba(17,113,184,.18) 0%,transparent 60%),radial-gradient(ellipse at top left,rgba(22,63,86,.10) 0%,transparent 55%),linear-gradient(180deg,#F6F8FB 0%,#E8EFF6 100%)}
 
 .droplet{display:inline-block;width:10px;height:10px;border-radius:50%}
 
-input[type=password]{width:100%;padding:.8rem 1rem;border:1px solid #e8e8e1;border-radius:10px;font:500 16px 'Manrope';outline:none;background:#fff}
-input[type=password]:focus{border-color:var(--aspen-green);box-shadow:0 0 0 3px rgba(0,104,56,.15)}
+input[type=password]{width:100%;padding:.8rem 1rem;border:1px solid #E2EAF1;border-radius:10px;font:500 16px 'Aktiv Grotesk','Hanken Grotesk';outline:none;background:#fff}
+input[type=password]:focus{border-color:var(--brand-primary);box-shadow:0 0 0 3px rgba(17,113,184,.18)}
 .err{margin-top:.75rem;font-size:13px;color:var(--danger);display:flex;align-items:center;gap:.4rem}
 
 .hidden{display:none!important}
-header.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid #e8e8e1}
-footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12px;color:#94a3b8;margin-top:64px}
+header.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid #E2EAF1}
+footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12px;color:#94a3b8;margin-top:64px}
 </style>
 </head>
 <body>
@@ -152,22 +160,22 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;align-items:flex-start">
           <div style="max-width:640px">
             <div style="display:flex;gap:8px;margin-bottom:12px">
-              <span class="chip" style="background:rgba(255,255,255,.12);color:#a7f3d0">WERC · 15 Aug 2025</span>
+              <span class="chip" style="background:rgba(255,255,255,.12);color:#C9E0EF">WERC · 15 Aug 2025</span>
               <span class="chip chip-warn">Water-stressed Catchment</span>
             </div>
-            <h2 class="font-display" style="font-size:36px;font-weight:500;margin:0;line-height:1.15">Pharmaceutical Company</h2>
-            <p style="color:rgba(167,243,208,.85);margin-top:12px;font-size:15px;line-height:1.6">Water-stressed coastal catchment. Basin water stress is projected to rise from <b style="color:#fff">High</b> today to <b style="color:#fff">Extremely High</b> by 2050. This twin models the real cost &amp; risk of every litre of water used on-site.</p>
+            <h2 class="font-display" style="font-size:36px;font-weight:600;margin:0;line-height:1.15">Pharmaceutical Company</h2>
+            <p style="color:rgba(201,224,239,.85);margin-top:12px;font-size:15px;line-height:1.6">Water-stressed coastal catchment. Basin water stress is projected to rise from <b style="color:#fff">High</b> today to <b style="color:#fff">Extremely High</b> by 2050. This twin models the real cost &amp; risk of every litre of water used on-site.</p>
           </div>
           <div style="display:flex;gap:28px;text-align:right">
             <div>
-              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Today demand</div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,224,239,.7)">Today demand</div>
               <div class="font-display" style="font-size:28px">520.6</div>
-              <div style="font-size:11px;color:rgba(167,243,208,.55)">kl / day</div>
+              <div style="font-size:11px;color:rgba(201,224,239,.55)">kl / day</div>
             </div>
             <div>
-              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">2050 demand</div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,224,239,.7)">2050 demand</div>
               <div class="font-display" style="font-size:28px;color:var(--aspen-lime)">1973.0</div>
-              <div style="font-size:11px;color:rgba(167,243,208,.55)">kl / day (+279%)</div>
+              <div style="font-size:11px;color:rgba(201,224,239,.55)">kl / day (+279%)</div>
             </div>
           </div>
         </div>
@@ -176,11 +184,11 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
       <div class="grid grid-4" style="margin-bottom:28px">
         <div class="card" style="padding:20px">
           <div class="metric-label">True cost · 2025</div>
-          <div class="metric-value" style="margin-top:10px">335.6 <span style="font-size:14px;color:#64748b;font-family:Manrope">R/kl</span></div>
+          <div class="metric-value" style="margin-top:10px">335.6 <span style="font-size:14px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">R/kl</span></div>
         </div>
         <div class="card" style="padding:20px">
           <div class="metric-label">BAU true cost · 2050</div>
-          <div class="metric-value" style="margin-top:10px;color:var(--danger)">753.5 <span style="font-size:14px;color:#64748b;font-family:Manrope">R/kl</span></div>
+          <div class="metric-value" style="margin-top:10px;color:var(--danger)">753.5 <span style="font-size:14px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">R/kl</span></div>
           <div style="font-size:11px;color:#64748b;margin-top:4px">+124% vs 2025</div>
         </div>
         <div class="card" style="padding:20px">
@@ -190,7 +198,7 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
         </div>
         <div class="card" style="padding:20px">
           <div class="metric-label">Full-strategy savings</div>
-          <div class="metric-value" style="margin-top:10px;color:var(--aspen-green)">R 3.8 <span style="font-size:14px;color:#64748b;font-family:Manrope">bn</span></div>
+          <div class="metric-value" style="margin-top:10px;color:var(--aspen-green)">R 3.8 <span style="font-size:14px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">bn</span></div>
           <div style="font-size:11px;color:#64748b;margin-top:4px">BaU 6.6 bn → Strategic 2.8 bn</div>
         </div>
       </div>
@@ -249,8 +257,8 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
         <canvas id="bauChart" height="130"></canvas>
       </div>
       <div class="grid grid-4" style="margin-top:20px">
-        <div class="card" style="padding:20px"><div class="metric-label">2025 demand</div><div class="metric-value" style="margin-top:10px">520.6 <span style="font-size:13px;color:#64748b;font-family:Manrope">kl/d</span></div></div>
-        <div class="card" style="padding:20px"><div class="metric-label">2050 demand</div><div class="metric-value" style="margin-top:10px;color:var(--warn)">1973.0 <span style="font-size:13px;color:#64748b;font-family:Manrope">kl/d</span></div></div>
+        <div class="card" style="padding:20px"><div class="metric-label">2025 demand</div><div class="metric-value" style="margin-top:10px">520.6 <span style="font-size:13px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">kl/d</span></div></div>
+        <div class="card" style="padding:20px"><div class="metric-label">2050 demand</div><div class="metric-value" style="margin-top:10px;color:var(--warn)">1973.0 <span style="font-size:13px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">kl/d</span></div></div>
         <div class="card" style="padding:20px"><div class="metric-label">2025 municipal share</div><div class="metric-value" style="margin-top:10px;color:var(--warn)">70%</div></div>
         <div class="card" style="padding:20px"><div class="metric-label">2050 groundwater share</div><div class="metric-value" style="margin-top:10px;color:var(--aspen-green)">89%</div></div>
       </div>
@@ -267,7 +275,7 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
         <div class="card" style="padding:24px">
           <div style="display:flex;justify-content:space-between;margin-bottom:16px">
             <div class="metric-label">Composition · R/kl</div>
-            <div class="font-display" style="font-size:28px;color:var(--aspen-green)">R 335 <span style="color:#94a3b8;font-size:13px;font-family:Manrope">per kl</span></div>
+            <div class="font-display" style="font-size:28px;color:var(--aspen-green)">R 335 <span style="color:#94a3b8;font-size:13px;font-family:'Aktiv Grotesk','Hanken Grotesk'">per kl</span></div>
           </div>
           <canvas id="tcPie" height="260"></canvas>
         </div>
@@ -292,9 +300,9 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
           <p style="color:#475569;font-size:14px;max-width:640px;margin-top:8px">Adjust each intervention to reduce incoming municipal volume. The twin recomputes true cost, risk exposure and cumulative savings instantly.</p>
         </div>
         <div class="card-dark" style="padding:16px 24px;text-align:right">
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Cumulative savings 2025–2050</div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,224,239,.7)">Cumulative savings 2025–2050</div>
           <div class="font-display" id="simHeroSavings" style="font-size:30px;color:var(--aspen-lime)">R 0</div>
-          <div id="simHeroBau" style="font-size:11px;color:rgba(167,243,208,.7)"></div>
+          <div id="simHeroBau" style="font-size:11px;color:rgba(201,224,239,.7)"></div>
         </div>
       </div>
 
@@ -303,13 +311,13 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
           <div class="card" style="padding:20px;margin-bottom:16px">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
               <div style="display:flex;gap:12px">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(141,198,63,.18);display:flex;align-items:center;justify-content:center"><i data-lucide="sun" style="width:16px;height:16px;color:#8dc63f"></i></div>
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(123,182,224,.18);display:flex;align-items:center;justify-content:center"><i data-lucide="sun" style="width:16px;height:16px;color:#7BB6E0"></i></div>
                 <div>
                   <div style="font-weight:500">Rainwater harvesting</div>
                   <div style="font-size:12px;color:#64748b">Condensation + roof capture · 54 kl/d offset</div>
                 </div>
               </div>
-              <div class="font-display" id="rwVal" style="font-size:22px;color:#8dc63f">10<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+              <div class="font-display" id="rwVal" style="font-size:22px;color:#7BB6E0">10<span style="font-size:13px;color:#94a3b8;font-family:'Aktiv Grotesk','Hanken Grotesk'">%</span></div>
             </div>
             <input id="rwSlider" type="range" min="0" max="30" value="10" style="margin-top:16px">
             <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 10%</div>
@@ -317,13 +325,13 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
           <div class="card" style="padding:20px;margin-bottom:16px">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
               <div style="display:flex;gap:12px">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(0,104,56,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="waves" style="width:16px;height:16px;color:var(--aspen-green)"></i></div>
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(22,63,86,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="waves" style="width:16px;height:16px;color:var(--aspen-green)"></i></div>
                 <div>
                   <div style="font-weight:500">Additional groundwater</div>
                   <div style="font-size:12px;color:#64748b">2× borehole, WUL extended to 2050</div>
                 </div>
               </div>
-              <div class="font-display" id="gwVal" style="font-size:22px;color:var(--aspen-green)">20<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+              <div class="font-display" id="gwVal" style="font-size:22px;color:var(--aspen-green)">20<span style="font-size:13px;color:#94a3b8;font-family:'Aktiv Grotesk','Hanken Grotesk'">%</span></div>
             </div>
             <input id="gwSlider" type="range" min="0" max="50" value="20" style="margin-top:16px">
             <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 20%</div>
@@ -331,13 +339,13 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
           <div class="card" style="padding:20px;margin-bottom:16px">
             <div style="display:flex;justify-content:space-between;align-items:flex-start">
               <div style="display:flex;gap:12px">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(8,145,178,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="recycle" style="width:16px;height:16px;color:var(--water-blue)"></i></div>
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(17,113,184,.12);display:flex;align-items:center;justify-content:center"><i data-lucide="recycle" style="width:16px;height:16px;color:var(--brand-primary)"></i></div>
                 <div>
                   <div style="font-weight:500">Water recovery plant</div>
                   <div style="font-size:12px;color:#64748b">Effluent reuse, 75% recovery · 637 kl/d offset</div>
                 </div>
               </div>
-              <div class="font-display" id="wrVal" style="font-size:22px;color:var(--water-blue)">40<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span></div>
+              <div class="font-display" id="wrVal" style="font-size:22px;color:var(--brand-primary)">40<span style="font-size:13px;color:#94a3b8;font-family:'Aktiv Grotesk','Hanken Grotesk'">%</span></div>
             </div>
             <input id="wrSlider" type="range" min="0" max="70" value="40" style="margin-top:16px">
             <div style="font-size:11px;color:#94a3b8;margin-top:6px">Client assumption: 40%</div>
@@ -394,12 +402,12 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
     <section id="tab-savings" class="hidden fade-up">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:20px">
         <div>
-          <span class="chip" style="background:rgba(141,198,63,.15);color:#4d7c0f">Financial outcome</span>
+          <span class="chip" style="background:rgba(123,182,224,.15);color:#062C60">Financial outcome</span>
           <h2 class="font-display" style="font-size:30px;font-weight:500;margin:8px 0 0">Cumulative savings</h2>
           <p style="color:#475569;font-size:14px;max-width:640px;margin-top:8px">Year-on-year savings accrue as each initiative comes online. Hover the chart for any year to see the exact figure.</p>
         </div>
         <div class="card-dark" style="padding:16px 24px;text-align:right">
-          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">25-yr savings</div>
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,224,239,.7)">25-yr savings</div>
           <div class="font-display" id="savHero" style="font-size:32px;color:var(--aspen-lime)">R 0</div>
         </div>
       </div>
@@ -409,7 +417,7 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
       <div class="grid grid-3" style="margin-top:20px">
         <div class="card" style="padding:24px;text-align:center"><div class="metric-label">BaU 25-yr cost</div><div class="metric-value" id="sumBau" style="margin-top:8px;color:var(--danger);font-size:34px">–</div><div style="font-size:11px;color:#64748b;margin-top:6px">if no initiatives are implemented</div></div>
         <div class="card" style="padding:24px;text-align:center"><div class="metric-label">Strategic 25-yr cost</div><div class="metric-value" id="sumStrat" style="margin-top:8px;color:var(--aspen-green);font-size:34px">–</div><div style="font-size:11px;color:#64748b;margin-top:6px">with active initiatives</div></div>
-        <div class="card-dark" style="padding:24px;text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(167,243,208,.7)">Net benefit</div><div class="font-display" id="sumSav" style="margin-top:8px;color:var(--aspen-lime);font-size:34px">–</div><div style="font-size:11px;color:rgba(167,243,208,.7);margin-top:6px">cumulative savings over 25 years</div></div>
+        <div class="card-dark" style="padding:24px;text-align:center"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:rgba(201,224,239,.7)">Net benefit</div><div class="font-display" id="sumSav" style="margin-top:8px;color:var(--aspen-lime);font-size:34px">–</div><div style="font-size:11px;color:rgba(201,224,239,.7);margin-top:6px">cumulative savings over 25 years</div></div>
       </div>
     </section>
   </main>
@@ -419,7 +427,7 @@ footer{border-top:1px solid #e8e8e1;padding:24px;text-align:center;font-size:12p
   <!-- PDF export overlay -->
   <div id="pdfOverlay" class="hidden" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center">
     <div class="card" style="padding:32px;max-width:360px;text-align:center">
-      <div style="width:32px;height:32px;margin:0 auto 12px;border:3px solid #e5e5dc;border-top-color:var(--aspen-green);border-radius:50%;animation:spin 1s linear infinite"></div>
+      <div style="width:32px;height:32px;margin:0 auto 12px;border:3px solid #DEE6EE;border-top-color:var(--brand-primary);border-radius:50%;animation:spin 1s linear infinite"></div>
       <div class="font-display" style="font-size:20px;font-weight:500;margin-bottom:4px">Building your PDF</div>
       <div id="pdfStatus" style="font-size:13px;color:#64748b">Please hold…</div>
     </div>
@@ -455,10 +463,10 @@ const TARIFFS = {
     "Water for injection":[332.76,"R/kl","+7.9% p.a."],
 };
 const TC_BREAKDOWN = [
-    ["Municipal tariff", 30.24, "#0891b2"],
-    ["Discharge tariff", 26.82, "#7c3aed"],
-    ["Treatment cost", 24.80, "#006838"],
-    ["Climate risk premium", 253.76, "#b91c1c"],
+    ["Municipal tariff", 30.24, "#1171B8"],
+    ["Discharge tariff", 26.82, "#4A90D9"],
+    ["Treatment cost", 24.80, "#163F56"],
+    ["Climate risk premium", 253.76, "#9D2C2C"],
 ];
 const TC_TOTAL = TC_BREAKDOWN.reduce((a,b)=>a+b[1],0);
 
@@ -579,7 +587,7 @@ function drawBau(){
             datasets:[
                 {type:'bar', label:'Municipal', data:mun, backgroundColor:'#0891b2', stack:'s', borderRadius:2},
                 {type:'bar', label:'Groundwater', data:gw, backgroundColor:'#006838', stack:'s', borderRadius:2},
-                {type:'line', label:'Total demand', data:demand, borderColor:'#0b1f18', backgroundColor:'#0b1f18', borderWidth:2.5, pointRadius:2, tension:.25},
+                {type:'line', label:'Total demand', data:demand, borderColor:'#062C60', backgroundColor:'#062C60', borderWidth:2.5, pointRadius:2, tension:.25},
                 {type:'line', label:'GW availability', data:gwAvail, borderColor:'#b91c1c', borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:0, fill:false},
             ]
         },
@@ -593,8 +601,8 @@ function drawTc(){
         data:{ labels: TC_BREAKDOWN.map(t=>t[0]),
                datasets:[{ data: TC_BREAKDOWN.map(t=>t[1]), backgroundColor: TC_BREAKDOWN.map(t=>t[2]), borderWidth:0 }]},
         options:{ cutout:'55%', plugins:{
-            legend:{ position:'bottom', labels:{ color:'#334155', font:{family:'Manrope',size:12}, usePointStyle:true }},
-            tooltip:{ backgroundColor:'#0b1f18', callbacks:{ label: c => `${c.label}: R ${c.parsed.toFixed(2)}/kl` } }
+            legend:{ position:'bottom', labels:{ color:'#163F56', font:{family:'Aktiv Grotesk',size:12}, usePointStyle:true }},
+            tooltip:{ backgroundColor:'#062C60', callbacks:{ label: c => `${c.label}: R ${c.parsed.toFixed(2)}/kl` } }
         }}
     });
     // side list
@@ -617,7 +625,7 @@ function fillTariffs(){
     document.getElementById('tariffGrid').innerHTML = Object.entries(TARIFFS).map(([k,[v,u,esc]])=>`
         <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
             <div class="metric-label" style="font-size:10px">${k}</div>
-            <div style="margin-top:4px" class="font-display" style="font-size:18px">R ${v.toFixed(2)} <span style="font-size:11px;color:#64748b;font-family:Manrope">${u}</span></div>
+            <div style="margin-top:4px" class="font-display" style="font-size:18px">R ${v.toFixed(2)} <span style="font-size:11px;color:#64748b;font-family:'Aktiv Grotesk','Hanken Grotesk'">${u}</span></div>
             <div style="font-size:11px;color:#64748b;margin-top:4px">${esc}</div>
         </div>`).join('');
 }
@@ -626,8 +634,8 @@ function drawSim(){
     charts.proj = new Chart(document.getElementById('projChart'),{
         type:'line',
         data:{ labels: YEARS, datasets:[
-            { label:'Business as Usual', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#b91c1c', backgroundColor:'rgba(185,28,28,0.12)', fill:true, tension:.3, pointRadius:0, borderWidth:2, order:2 },
-            { label:'Strategic', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#006838', backgroundColor:'rgba(0,104,56,0.25)', fill:'origin', tension:.3, pointRadius:0, borderWidth:2.5, order:1 },
+            { label:'Business as Usual', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#9D2C2C', backgroundColor:'rgba(157,44,44,0.12)', fill:true, tension:.3, pointRadius:0, borderWidth:2, order:2 },
+            { label:'Strategic', data: YEARS.map(y=>BAU_TRUE[y]), borderColor:'#1171B8', backgroundColor:'rgba(17,113,184,0.25)', fill:'origin', tension:.3, pointRadius:0, borderWidth:2.5, order:1 },
         ]},
         options: chartOpts({ y:{ title:{display:true, text:'R/kl', color:'#64748b'}, beginAtZero:true } })
     });
@@ -649,18 +657,18 @@ function drawSim(){
 function drawSav(){
     charts.sav = new Chart(document.getElementById('savChart'),{
         data:{ labels: YEARS, datasets:[
-            { type:'bar', label:'Annual savings', data: [], backgroundColor:'#8dc63f', borderRadius:2, yAxisID:'y' },
-            { type:'line', label:'Cumulative savings', data: [], borderColor:'#006838', backgroundColor:'rgba(0,104,56,0.2)', fill:true, tension:.25, pointRadius:0, yAxisID:'y1' },
+            { type:'bar', label:'Annual savings', data: [], backgroundColor:'#7BB6E0', borderRadius:2, yAxisID:'y' },
+            { type:'line', label:'Cumulative savings', data: [], borderColor:'#062C60', backgroundColor:'rgba(17,113,184,0.25)', fill:true, tension:.25, pointRadius:0, yAxisID:'y1' },
         ]},
         options:{ responsive:true, maintainAspectRatio:true,
             plugins:{
-                legend:{ position:'bottom', labels:{color:'#334155',font:{family:'Manrope',size:12},usePointStyle:true} },
-                tooltip:{ backgroundColor:'#0b1f18', callbacks:{ label: c => `${c.dataset.label}: ${zar(c.parsed.y,2)}` } }
+                legend:{ position:'bottom', labels:{color:'#163F56',font:{family:'Aktiv Grotesk',size:12},usePointStyle:true} },
+                tooltip:{ backgroundColor:'#062C60', callbacks:{ label: c => `${c.dataset.label}: ${zar(c.parsed.y,2)}` } }
             },
             scales:{
-                x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}},
-                y:{ position:'left', grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}, callback:v=>zar(v,0)} },
-                y1:{ position:'right', grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}, callback:v=>zar(v,0)} },
+                x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Aktiv Grotesk',size:11}}},
+                y:{ position:'left', grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Aktiv Grotesk',size:11}, callback:v=>zar(v,0)} },
+                y1:{ position:'right', grid:{display:false}, ticks:{color:'#64748b',font:{family:'Aktiv Grotesk',size:11}, callback:v=>zar(v,0)} },
             }
         }
     });
@@ -671,11 +679,11 @@ function chartOpts(scales){
     return {
         responsive:true, maintainAspectRatio:true,
         plugins:{
-            legend:{ position:'bottom', labels:{color:'#334155',font:{family:'Manrope',size:12},usePointStyle:true}},
-            tooltip:{ backgroundColor:'#0b1f18', borderColor:'rgba(255,255,255,.08)', titleColor:'#a7f3d0' }
+            legend:{ position:'bottom', labels:{color:'#163F56',font:{family:'Aktiv Grotesk',size:12},usePointStyle:true}},
+            tooltip:{ backgroundColor:'#062C60', borderColor:'rgba(255,255,255,.08)', titleColor:'#C9E0EF' }
         },
-        scales: { x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}, ...(scales.x||{}) },
-                  y:{ grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Manrope',size:11}}, ...(scales.y||{}) } }
+        scales: { x:{ grid:{display:false}, ticks:{color:'#64748b',font:{family:'Aktiv Grotesk',size:11}}, ...(scales.x||{}) },
+                  y:{ grid:{color:'#e2e8f0'}, ticks:{color:'#64748b',font:{family:'Aktiv Grotesk',size:11}}, ...(scales.y||{}) } }
     };
 }
 
@@ -694,9 +702,9 @@ function updateSim(){
     document.getElementById('gwSlider').style.setProperty('--pct', (gw/50)*100+'%');
     document.getElementById('wrSlider').style.setProperty('--pct', (wr/70)*100+'%');
 
-    document.getElementById('rwVal').innerHTML = rw+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
-    document.getElementById('gwVal').innerHTML = gw+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
-    document.getElementById('wrVal').innerHTML = wr+'<span style="font-size:13px;color:#94a3b8;font-family:Manrope">%</span>';
+    document.getElementById('rwVal').innerHTML = rw+'<span style="font-size:13px;color:#94a3b8">%</span>';
+    document.getElementById('gwVal').innerHTML = gw+'<span style="font-size:13px;color:#94a3b8">%</span>';
+    document.getElementById('wrVal').innerHTML = wr+'<span style="font-size:13px;color:#94a3b8">%</span>';
 
     const s = computeScenario(rw,gw,wr,sm,desal);
 
@@ -715,7 +723,7 @@ function updateSim(){
     // KPIs simulator
     document.getElementById('reducVal').textContent = s.red2050.toFixed(0)+'%';
     document.getElementById('kpiRed').textContent = s.red2050.toFixed(0)+'%';
-    document.getElementById('kpiTcw').innerHTML = n1(s.strat2050)+' <span style="font-size:12px;color:#64748b;font-family:Manrope">R/kl</span>';
+    document.getElementById('kpiTcw').innerHTML = n1(s.strat2050)+' <span style="font-size:12px;color:#64748b">R/kl</span>';
     document.getElementById('kpiBau').textContent = zar(s.cumBau,1);
     document.getElementById('kpiSav').textContent = zar(s.cum,2);
     document.getElementById('simHeroSavings').textContent = zar(s.cum,2);
@@ -767,25 +775,25 @@ async function downloadPDF(){
 
         // COVER
         statusEl.textContent = 'Building cover…';
-        pdf.setFillColor(11,31,24); pdf.rect(0,0,W,H,'F');
-        pdf.setFillColor(0,74,40);  pdf.rect(0,0,W,3,'F');
+        pdf.setFillColor(6,44,96); pdf.rect(0,0,W,H,'F');
+        pdf.setFillColor(17,113,184);  pdf.rect(0,0,W,3,'F');
         try {
             const logo = await loadImg('/talbot-logo.png');
             pdf.addImage(logo,'PNG',18,18,28,28);
         } catch(_){}
-        pdf.setTextColor(167,243,208); pdf.setFont('helvetica','normal'); pdf.setFontSize(10);
+        pdf.setTextColor(201,224,239); pdf.setFont('helvetica','normal'); pdf.setFontSize(10);
         pdf.text('DIGITAL TWIN',18,62,{charSpace:1.8});
         pdf.setTextColor(255,255,255); pdf.setFont('helvetica','bold'); pdf.setFontSize(22);
         pdf.text('WERC',18,72);
         pdf.setFont('helvetica','normal'); pdf.setFontSize(40); pdf.setTextColor(255,255,255);
         pdf.text('Water risk,',18,110);
-        pdf.setTextColor(141,198,63); pdf.setFont('helvetica','italic');
+        pdf.setTextColor(201,224,239); pdf.setFont('helvetica','italic');
         pdf.text('quantified.',18,128);
-        pdf.setFont('helvetica','normal'); pdf.setFontSize(12); pdf.setTextColor(220,235,225);
+        pdf.setFont('helvetica','normal'); pdf.setFontSize(12); pdf.setTextColor(220,235,245);
         pdf.text('Pharmaceutical Company · WERC Feedback Study (15 August 2025)',18,146);
-        pdf.setFontSize(10); pdf.setTextColor(141,198,63);
+        pdf.setFontSize(10); pdf.setTextColor(124,182,224);
         pdf.text('Business-as-Usual exposure · Strategic outlook · 2025 – 2050',18,154);
-        pdf.setFontSize(9); pdf.setTextColor(120,160,140);
+        pdf.setFontSize(9); pdf.setTextColor(150,180,210);
         pdf.text('Confidential · Prepared by Talbot · DWFM × KfW-IPEX',18,H-14);
         pdf.text(new Date().toLocaleDateString('en-ZA',{year:'numeric',month:'long',day:'numeric'}),W-18,H-14,{align:'right'});
 
@@ -811,11 +819,11 @@ async function downloadPDF(){
             const imgData = canvas.toDataURL('image/jpeg', 0.92);
 
             pdf.addPage('a4','landscape');
-            pdf.setFillColor(250,250,247); pdf.rect(0,0,W,H,'F');
-            pdf.setFillColor(0,104,56);    pdf.rect(0,0,W,3,'F');
+            pdf.setFillColor(246,248,251); pdf.rect(0,0,W,H,'F');
+            pdf.setFillColor(17,113,184);    pdf.rect(0,0,W,3,'F');
             pdf.setFont('helvetica','normal'); pdf.setFontSize(8); pdf.setTextColor(100,116,139);
             pdf.text('WERC DIGITAL TWIN',15,10);
-            pdf.setFont('helvetica','bold'); pdf.setFontSize(11); pdf.setTextColor(11,31,24);
+            pdf.setFont('helvetica','bold'); pdf.setFontSize(11); pdf.setTextColor(6,44,96);
             pdf.text(t.title,15,15);
             pdf.setFont('helvetica','normal'); pdf.setFontSize(8); pdf.setTextColor(100,116,139);
             pdf.text(`${i+2} / ${tabs.length+1}`, W-15, 10, {align:'right'});
@@ -843,6 +851,10 @@ async function downloadPDF(){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
+</script>
+</body>
+</html>
+entListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
 </script>
 </body>
 </html>

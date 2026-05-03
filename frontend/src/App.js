@@ -113,10 +113,10 @@ const Metric = ({ label, value, unit, tone = "default", icon: Icon, delta, testI
             <div className="metric-label">{label}</div>
             {Icon && (
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    tone === "danger" ? "bg-red-50 text-red-600"
-                    : tone === "warn" ? "bg-amber-50 text-amber-600"
-                    : tone === "ok" ? "bg-emerald-50 text-[var(--aspen-green)]"
-                    : "bg-cyan-50 text-[var(--water-blue-deep)]"
+                    tone === "danger" ? "bg-red-50 text-red-700"
+                    : tone === "warn" ? "bg-amber-50 text-amber-700"
+                    : tone === "ok" ? "bg-sky-50 text-[var(--aspen-green)]"
+                    : "bg-slate-50 text-[var(--water-blue-deep)]"
                 }`}>
                     <Icon className="w-4 h-4" />
                 </div>
@@ -145,7 +145,7 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                 <div className="flex flex-wrap items-start justify-between gap-6">
                     <div className="max-w-2xl">
                         <div className="flex items-center gap-2 mb-3">
-                            <span className="chip" style={{ background: "rgba(255,255,255,0.12)", color: "#a7f3d0" }}>
+                            <span className="chip" style={{ background: "rgba(255,255,255,0.12)", color: "#C9E0EF" }}>
                                 WERC · 15 Aug 2025
                             </span>
                             <span className="chip chip-warn">Water-stressed Catchment</span>
@@ -153,7 +153,7 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                         <h2 className="font-display text-3xl md:text-4xl font-medium leading-tight">
                             {site.name}
                         </h2>
-                        <p className="text-emerald-100/80 mt-3 text-sm md:text-base leading-relaxed">
+                        <p className="text-sky-100/85 mt-3 text-sm md:text-base leading-relaxed">
                             {site.catchment}. Basin water stress is projected to rise from
                             <b className="text-white"> High</b> today to
                             <b className="text-white"> Extremely High</b> by 2050.
@@ -162,14 +162,14 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                     </div>
                     <div className="flex gap-6 text-right">
                         <div>
-                            <div className="text-[11px] uppercase tracking-widest text-emerald-200/70">Today demand</div>
+                            <div className="text-[11px] uppercase tracking-widest text-sky-200/75">Today demand</div>
                             <div className="font-display text-3xl">{n1(site.current_demand_kl_d)}</div>
-                            <div className="text-xs text-emerald-100/60">kl / day</div>
+                            <div className="text-xs text-sky-100/65">kl / day</div>
                         </div>
                         <div>
-                            <div className="text-[11px] uppercase tracking-widest text-emerald-200/70">2050 demand</div>
-                            <div className="font-display text-3xl text-[var(--aspen-lime)]">{n1(site.future_demand_kl_d)}</div>
-                            <div className="text-xs text-emerald-100/60">kl / day (+279%)</div>
+                            <div className="text-[11px] uppercase tracking-widest text-sky-200/75">2050 demand</div>
+                            <div className="font-display text-3xl text-[var(--brand-sky)]" style={{ color: "#C9E0EF" }}>{n1(site.future_demand_kl_d)}</div>
+                            <div className="text-xs text-sky-100/65">kl / day (+279%)</div>
                         </div>
                     </div>
                 </div>
@@ -278,12 +278,12 @@ const BauTab = ({ bau }) => {
                     <ComposedChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="gMun" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#0891b2" stopOpacity={0.95} />
-                                <stop offset="100%" stopColor="#0891b2" stopOpacity={0.75} />
+                                <stop offset="0%" stopColor="#1171B8" stopOpacity={0.95} />
+                                <stop offset="100%" stopColor="#1171B8" stopOpacity={0.75} />
                             </linearGradient>
                             <linearGradient id="gGw" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#006838" stopOpacity={0.95} />
-                                <stop offset="100%" stopColor="#006838" stopOpacity={0.7} />
+                                <stop offset="0%" stopColor="#163F56" stopOpacity={0.95} />
+                                <stop offset="100%" stopColor="#163F56" stopOpacity={0.7} />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -293,10 +293,10 @@ const BauTab = ({ bau }) => {
                         <Legend iconType="circle" wrapperStyle={{ paddingTop: 8 }} />
                         <Bar dataKey="supply_municipal" name="Municipal" stackId="a" fill="url(#gMun)" />
                         <Bar dataKey="supply_groundwater" name="Groundwater" stackId="a" fill="url(#gGw)" />
-                        <Bar dataKey="supply_rainwater" name="Rainwater" stackId="a" fill="#8dc63f" />
-                        <Bar dataKey="supply_recovered" name="Recovered" stackId="a" fill="#a16207" />
-                        <Line type="monotone" dataKey="demand_total" name="Total demand" stroke="#0b1f18" strokeWidth={2.5} dot={{ r: 2 }} />
-                        <Line type="monotone" dataKey="gw_availability" name="GW availability" stroke="#b91c1c" strokeDasharray="5 4" strokeWidth={1.5} dot={false} />
+                        <Bar dataKey="supply_rainwater" name="Rainwater" stackId="a" fill="#7BB6E0" />
+                        <Bar dataKey="supply_recovered" name="Recovered" stackId="a" fill="#062C60" />
+                        <Line type="monotone" dataKey="demand_total" name="Total demand" stroke="#062C60" strokeWidth={2.5} dot={{ r: 2 }} />
+                        <Line type="monotone" dataKey="gw_availability" name="GW availability" stroke="#9D2C2C" strokeDasharray="5 4" strokeWidth={1.5} dot={false} />
                         <ReferenceLine x={2026} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "2nd BH + NH₃", position: "top", fill: "#64748b", fontSize: 11 }} />
                         <ReferenceLine x={2029} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "SVP3", position: "top", fill: "#64748b", fontSize: 11 }} />
                     </ComposedChart>
@@ -319,10 +319,10 @@ const BauTab = ({ bau }) => {
 const TrueCostTab = ({ tc, projection }) => {
     if (!tc || !projection) return null;
     const pieData = [
-        { name: "Municipal tariff", value: tc.breakdown.municipal_tariff, colour: "#0891b2" },
-        { name: "Discharge tariff", value: tc.breakdown.discharge_tariff, colour: "#7c3aed" },
-        { name: "Treatment cost", value: tc.breakdown.treatment_cost, colour: "#006838" },
-        { name: "Climate risk premium", value: tc.breakdown.climate_risk, colour: "#b91c1c" },
+        { name: "Municipal tariff", value: tc.breakdown.municipal_tariff, colour: "#1171B8" },
+        { name: "Discharge tariff", value: tc.breakdown.discharge_tariff, colour: "#4A90D9" },
+        { name: "Treatment cost", value: tc.breakdown.treatment_cost, colour: "#163F56" },
+        { name: "Climate risk premium", value: tc.breakdown.climate_risk, colour: "#9D2C2C" },
     ];
     const total = tc.total;
 
@@ -453,9 +453,9 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                 </div>
                 {scenario && (
                     <div className="card-dark px-6 py-4 text-right" data-testid="scenario-summary-pill">
-                        <div className="text-[10px] uppercase tracking-widest text-emerald-200/70">Cumulative savings 2025–2050</div>
-                        <div className="font-display text-3xl text-[var(--aspen-lime)]">{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
-                        <div className="text-xs text-emerald-100/70">vs BaU R {scenario.summary.cumulative_bau_cost_zar_bn.toFixed(1)} bn</div>
+                        <div className="text-[10px] uppercase tracking-widest text-sky-200/75">Cumulative savings 2025–2050</div>
+                        <div className="font-display text-3xl" style={{ color: "#C9E0EF" }}>{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
+                        <div className="text-xs text-sky-100/70">vs BaU R {scenario.summary.cumulative_bau_cost_zar_bn.toFixed(1)} bn</div>
                     </div>
                 )}
             </div>
@@ -464,9 +464,9 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                 {/* Controls */}
                 <div className="space-y-4">
                     {[
-                        { id: "rw", label: "Rainwater harvesting", desc: "Condensation + roof capture · 54 kl/d offset", icon: Sun, v: rw, set: setRw, max: 30, colour: "#8dc63f", assumption: "Client assumption: 10%" },
-                        { id: "gw", label: "Additional groundwater", desc: "2× borehole, WUL extended to 2050", icon: Waves, v: gw, set: setGw, max: 50, colour: "#006838", assumption: "Client assumption: 20%" },
-                        { id: "wr", label: "Water recovery plant", desc: "Effluent reuse, 75% recovery · 637 kl/d offset", icon: Recycle, v: wr, set: setWr, max: 70, colour: "#0891b2", assumption: "Client assumption: 40%" },
+                        { id: "rw", label: "Rainwater harvesting", desc: "Condensation + roof capture · 54 kl/d offset", icon: Sun, v: rw, set: setRw, max: 30, colour: "#7BB6E0", assumption: "Client assumption: 10%" },
+                        { id: "gw", label: "Additional groundwater", desc: "2× borehole, WUL extended to 2050", icon: Waves, v: gw, set: setGw, max: 50, colour: "#163F56", assumption: "Client assumption: 20%" },
+                        { id: "wr", label: "Water recovery plant", desc: "Effluent reuse, 75% recovery · 637 kl/d offset", icon: Recycle, v: wr, set: setWr, max: 70, colour: "#1171B8", assumption: "Client assumption: 40%" },
                     ].map(({ id, label, desc, icon: Ic, v, set, max, colour, assumption }) => (
                         <div key={id} className="card p-5" data-testid={`slider-card-${id}`}>
                             <div className="flex items-start justify-between">
@@ -541,12 +541,12 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                                 <AreaChart data={scenario.rows} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="bauFill" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#b91c1c" stopOpacity={0.35} />
-                                            <stop offset="100%" stopColor="#b91c1c" stopOpacity={0.02} />
+                                            <stop offset="0%" stopColor="#9D2C2C" stopOpacity={0.30} />
+                                            <stop offset="100%" stopColor="#9D2C2C" stopOpacity={0.02} />
                                         </linearGradient>
                                         <linearGradient id="stratFill" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#006838" stopOpacity={0.35} />
-                                            <stop offset="100%" stopColor="#006838" stopOpacity={0.02} />
+                                            <stop offset="0%" stopColor="#1171B8" stopOpacity={0.35} />
+                                            <stop offset="100%" stopColor="#1171B8" stopOpacity={0.02} />
                                         </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -554,8 +554,8 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                                     <YAxis tickLine={false} axisLine={false} />
                                     <Tooltip formatter={(v) => `R ${Number(v).toFixed(0)}/kl`} />
                                     <Legend iconType="circle" />
-                                    <Area type="monotone" dataKey="bau_true_cost" name="Business as Usual" stroke="#b91c1c" fill="url(#bauFill)" strokeWidth={2} />
-                                    <Area type="monotone" dataKey="strategic_true_cost" name="Strategic" stroke="#006838" fill="url(#stratFill)" strokeWidth={2} />
+                                    <Area type="monotone" dataKey="bau_true_cost" name="Business as Usual" stroke="#9D2C2C" fill="url(#bauFill)" strokeWidth={2} />
+                                    <Area type="monotone" dataKey="strategic_true_cost" name="Strategic" stroke="#1171B8" fill="url(#stratFill)" strokeWidth={2} />
                                 </AreaChart>
                             </ResponsiveContainer>
                         )}
@@ -604,7 +604,7 @@ const SavingsTab = ({ scenario }) => {
         <div className="space-y-6 fade-up" data-testid="savings-tab">
             <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                    <span className="chip" style={{ background: "rgba(141,198,63,0.15)", color: "#4d7c0f" }}>Financial outcome</span>
+                    <span className="chip" style={{ background: "rgba(201,224,239,0.5)", color: "#062C60" }}>Financial outcome</span>
                     <h2 className="font-display text-3xl font-medium mt-2">Cumulative savings</h2>
                     <p className="text-slate-600 max-w-2xl mt-2 text-sm">
                         Year-on-year savings accrue as each initiative comes online.
@@ -612,8 +612,8 @@ const SavingsTab = ({ scenario }) => {
                     </p>
                 </div>
                 <div className="card-dark px-6 py-4 text-right">
-                    <div className="text-[10px] uppercase tracking-widest text-emerald-200/70">25-yr savings</div>
-                    <div className="font-display text-4xl text-[var(--aspen-lime)]">{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
+                    <div className="text-[10px] uppercase tracking-widest text-sky-200/75">25-yr savings</div>
+                    <div className="font-display text-4xl" style={{ color: "#C9E0EF" }}>{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
                 </div>
             </div>
 
@@ -622,8 +622,8 @@ const SavingsTab = ({ scenario }) => {
                     <ComposedChart data={scenario.rows} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="cumFill" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#006838" stopOpacity={0.45} />
-                                <stop offset="100%" stopColor="#006838" stopOpacity={0.02} />
+                                <stop offset="0%" stopColor="#1171B8" stopOpacity={0.45} />
+                                <stop offset="100%" stopColor="#1171B8" stopOpacity={0.02} />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -651,9 +651,9 @@ const SavingsTab = ({ scenario }) => {
                     <div className="text-xs text-slate-500 mt-2">with active initiatives</div>
                 </div>
                 <div className="card-dark p-6 text-center">
-                    <div className="text-[10px] uppercase tracking-widest text-emerald-200/70">Net benefit</div>
-                    <div className="font-display text-4xl mt-2 text-[var(--aspen-lime)]">{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
-                    <div className="text-xs text-emerald-100/70 mt-2">cumulative savings over 25 years</div>
+                    <div className="text-[10px] uppercase tracking-widest text-sky-200/75">Net benefit</div>
+                    <div className="font-display text-4xl mt-2" style={{ color: "#C9E0EF" }}>{zar(scenario.summary.cumulative_savings_zar, 2)}</div>
+                    <div className="text-xs text-sky-100/70 mt-2">cumulative savings over 25 years</div>
                 </div>
             </div>
         </div>
@@ -709,9 +709,9 @@ function Dashboard() {
 
             // --- COVER PAGE ---
             setExportStatus("Building cover…");
-            pdf.setFillColor(11, 31, 24);               // ink
+            pdf.setFillColor(6, 44, 96);                // brand-deep (Royal Navy)
             pdf.rect(0, 0, W, H, "F");
-            pdf.setFillColor(0, 74, 40);                // aspen-green-deep accent strip
+            pdf.setFillColor(17, 113, 184);             // RAL 5015 accent strip
             pdf.rect(0, 0, W, 3, "F");
 
             // Logo (load as image)
@@ -721,7 +721,7 @@ function Dashboard() {
                 pdf.addImage(logoImg, "PNG", 18, 18, lw, lh);
             } catch (_) { /* ignore logo load failure */ }
 
-            pdf.setTextColor(167, 243, 208);
+            pdf.setTextColor(201, 224, 239);
             pdf.setFont("helvetica", "normal");
             pdf.setFontSize(10);
             pdf.text("DIGITAL TWIN", 18, 62, { charSpace: 1.8 });
@@ -734,22 +734,22 @@ function Dashboard() {
             pdf.setFontSize(40);
             pdf.setTextColor(255, 255, 255);
             pdf.text("Water risk,", 18, 110);
-            pdf.setTextColor(141, 198, 63);            // lime
+            pdf.setTextColor(201, 224, 239);            // Pastel Sky Blue
             pdf.setFont("helvetica", "italic");
             pdf.text("quantified.", 18, 128);
 
             pdf.setFont("helvetica", "normal");
             pdf.setFontSize(12);
-            pdf.setTextColor(220, 235, 225);
+            pdf.setTextColor(220, 235, 245);
             const subtitle = site?.name ? `${site.name} · WERC Feedback Study (15 August 2025)` : "WERC Feedback Study";
             pdf.text(subtitle, 18, 146);
             pdf.setFontSize(10);
-            pdf.setTextColor(141, 198, 63);
+            pdf.setTextColor(124, 182, 224);
             pdf.text("Business-as-Usual exposure · Strategic outlook · 2025 – 2050", 18, 154);
 
             // Footer on cover
             pdf.setFontSize(9);
-            pdf.setTextColor(120, 160, 140);
+            pdf.setTextColor(150, 180, 210);
             pdf.text("Confidential · Prepared by Talbot · DWFM × KfW-IPEX", 18, H - 14);
             pdf.text(new Date().toLocaleDateString("en-ZA", { year:"numeric", month:"long", day:"numeric" }), W - 18, H - 14, { align: "right" });
 
@@ -774,7 +774,7 @@ function Dashboard() {
                 if (!main) continue;
                 const canvas = await html2canvas(main, {
                     scale: 2,
-                    backgroundColor: "#fafaf7",
+                    backgroundColor: "#F6F8FB",
                     useCORS: true,
                     logging: false,
                     windowWidth: main.scrollWidth,
@@ -783,9 +783,9 @@ function Dashboard() {
 
                 pdf.addPage("a4", "landscape");
                 // Header strip on each content page
-                pdf.setFillColor(250, 250, 247);
+                pdf.setFillColor(246, 248, 251);
                 pdf.rect(0, 0, W, H, "F");
-                pdf.setFillColor(0, 104, 56);
+                pdf.setFillColor(17, 113, 184);            // RAL 5015 accent strip
                 pdf.rect(0, 0, W, 3, "F");
                 // Page title
                 pdf.setFont("helvetica", "normal");
@@ -794,7 +794,7 @@ function Dashboard() {
                 pdf.text("WERC DIGITAL TWIN", 15, 10);
                 pdf.setFont("helvetica", "bold");
                 pdf.setFontSize(11);
-                pdf.setTextColor(11, 31, 24);
+                pdf.setTextColor(6, 44, 96);                // Royal Navy
                 pdf.text(t.title, 15, 15);
                 pdf.setFont("helvetica", "normal");
                 pdf.setFontSize(8);
