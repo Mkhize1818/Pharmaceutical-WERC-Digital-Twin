@@ -585,8 +585,8 @@ function drawBau(){
         data:{
             labels,
             datasets:[
-                {type:'bar', label:'Municipal', data:mun, backgroundColor:'#0891b2', stack:'s', borderRadius:2},
-                {type:'bar', label:'Groundwater', data:gw, backgroundColor:'#006838', stack:'s', borderRadius:2},
+                {type:'bar', label:'Municipal', data:mun, backgroundColor:'#1171B8', stack:'s', borderRadius:2},
+                {type:'bar', label:'Groundwater', data:gw, backgroundColor:'#163F56', stack:'s', borderRadius:2},
                 {type:'line', label:'Total demand', data:demand, borderColor:'#062C60', backgroundColor:'#062C60', borderWidth:2.5, pointRadius:2, tension:.25},
                 {type:'line', label:'GW availability', data:gwAvail, borderColor:'#b91c1c', borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:0, fill:false},
             ]
@@ -851,10 +851,6 @@ async function downloadPDF(){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
-</script>
-</body>
-</html>
-entListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
 </script>
 </body>
 </html>

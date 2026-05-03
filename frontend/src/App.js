@@ -632,8 +632,8 @@ const SavingsTab = ({ scenario }) => {
                         <YAxis yAxisId="r" orientation="right" tickLine={false} axisLine={false} tickFormatter={(v) => zar(v, 0)} />
                         <Tooltip formatter={(v) => zar(Number(v), 2)} />
                         <Legend iconType="circle" />
-                        <Bar yAxisId="l" dataKey="annual_savings_zar" name="Annual savings" fill="#8dc63f" />
-                        <Area yAxisId="r" type="monotone" dataKey="cumulative_savings_zar" name="Cumulative savings" stroke="#006838" fill="url(#cumFill)" strokeWidth={2.5} />
+                        <Bar yAxisId="l" dataKey="annual_savings_zar" name="Annual savings" fill="#7BB6E0" />
+                        <Area yAxisId="r" type="monotone" dataKey="cumulative_savings_zar" name="Cumulative savings" stroke="#062C60" fill="url(#cumFill)" strokeWidth={2.5} />
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
