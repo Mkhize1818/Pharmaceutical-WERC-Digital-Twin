@@ -108,7 +108,7 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
         </div>
       </div>
       <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 12px">Water risk, <span style="font-style:italic;color:var(--aspen-green)">quantified.</span></h1>
-      <p style="color:#475569;font-size:14px;line-height:1.6;margin:0">A live scenario model for a <b>Pharmaceutical Company</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
+      <p style="color:#475569;font-size:14px;line-height:1.6;margin:0">A live scenario model for an <b>Industrial Client</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
     </div>
     <form id="loginForm" class="card" style="padding:24px" onsubmit="handleLogin(event)">
       <label class="metric-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
@@ -163,7 +163,7 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
               <span class="chip" style="background:rgba(255,255,255,.12);color:#C9E0EF">WERC · 15 Aug 2025</span>
               <span class="chip chip-warn">Water-stressed Catchment</span>
             </div>
-            <h2 class="font-display" style="font-size:36px;font-weight:600;margin:0;line-height:1.15">Pharmaceutical Company</h2>
+            <h2 class="font-display" style="font-size:36px;font-weight:600;margin:0;line-height:1.15">Industrial Client</h2>
             <p style="color:rgba(201,224,239,.85);margin-top:12px;font-size:15px;line-height:1.6">Water-stressed coastal catchment. Basin water stress is projected to rise from <b style="color:#fff">High</b> today to <b style="color:#fff">Extremely High</b> by 2050. This twin models the real cost &amp; risk of every litre of water used on-site.</p>
           </div>
           <div style="display:flex;gap:28px;text-align:right">
@@ -208,21 +208,21 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
             <div>
               <div class="metric-label">Site processes</div>
-              <h3 class="font-display" style="font-size:20px;font-weight:500;margin:4px 0 0">Pharmaceutical manufacturing</h3>
+              <h3 class="font-display" style="font-size:20px;font-weight:500;margin:4px 0 0">Beverage manufacturing</h3>
             </div>
             <i data-lucide="factory" style="width:24px;height:24px;color:var(--aspen-green)"></i>
           </div>
           <div class="grid grid-2">
             <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
               <div class="metric-label" style="font-size:10px">76% of output</div>
-              <div style="font-weight:500;margin-top:4px">Oral Solid Dose (OSD) Manufacturing</div>
+              <div style="font-weight:500;margin-top:4px">Carbonated Soft Drinks</div>
             </div>
             <div style="border:1px solid #e8e8e1;border-radius:10px;padding:14px">
               <div class="metric-label" style="font-size:10px">24% of output</div>
-              <div style="font-weight:500;margin-top:4px">Small Volume Parenteral (SVP) Manufacturing</div>
+              <div style="font-weight:500;margin-top:4px">Still Beverages &amp; Juices</div>
             </div>
           </div>
-          <div style="margin-top:18px;font-size:13px;color:#475569;line-height:1.6">Production pipeline includes NH₃ condensation (+827 kl/d), SVP3 expansion (+33%) and WTP upgrade (75% recovery). Annual production today: <b>3 142 103 kg</b>.</div>
+          <div style="margin-top:18px;font-size:13px;color:#475569;line-height:1.6">Production pipeline includes refrigeration upgrade (+827 kl/d cooling demand), Line 3 expansion (+33%) and WTP upgrade (75% recovery). Annual production today: <b>3.14 ML</b>.</div>
         </div>
         <div class="card" style="padding:24px">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -471,7 +471,7 @@ const TC_BREAKDOWN = [
 const TC_TOTAL = TC_BREAKDOWN.reduce((a,b)=>a+b[1],0);
 
 const INITIATIVES = [
-    { name:"Smart Metering &amp; Optimisation", capex:"R 2 m", yr:2027, blurb:"Sub-metering, leak detection and process optimisation across OSD &amp; SVP." },
+    { name:"Smart Metering &amp; Optimisation", capex:"R 2 m", yr:2027, blurb:"Sub-metering, leak detection and process optimisation across both production lines." },
     { name:"Rainwater Harvesting", capex:"R 500 k", yr:2031, blurb:"Condensation + rainwater capture, 90% plant recovery, 54 kl/d offset." },
     { name:"Additional Borehole (Groundwater)", capex:"R 15 m", yr:2026, blurb:"Second production borehole — adds 1 ML/d raw supply; WUL extended to 2050." },
     { name:"Water Recovery Plant (WRP)", capex:"R 65 m", yr:2033, blurb:"Effluent treatment train, 850 kl/d capacity, 75% recovery, 31% offset." },
@@ -790,7 +790,7 @@ async function downloadPDF(){
         pdf.setTextColor(201,224,239); pdf.setFont('helvetica','italic');
         pdf.text('quantified.',18,128);
         pdf.setFont('helvetica','normal'); pdf.setFontSize(12); pdf.setTextColor(220,235,245);
-        pdf.text('Pharmaceutical Company · WERC Feedback Study (15 August 2025)',18,146);
+        pdf.text('Industrial Client · WERC Feedback Study (15 August 2025)',18,146);
         pdf.setFontSize(10); pdf.setTextColor(124,182,224);
         pdf.text('Business-as-Usual exposure · Strategic outlook · 2025 – 2050',18,154);
         pdf.setFontSize(9); pdf.setTextColor(150,180,210);

@@ -138,7 +138,7 @@ INITIATIVES = [
         "opex_zar_pa": 150_000,
         "reduction_pct": 0.08,                   # 8 % consumption reduction (Inputs C163)
         "year_impl": 2026, "year_impact": 2027,
-        "blurb": "Sub-metering, leak detection and process optimisation across OSD & SVP.",
+        "blurb": "Sub-metering, leak detection and process optimisation across both production lines.",
     },
     {
         "id": "rainwater",
@@ -194,12 +194,12 @@ STRATEGY_TOTALS = {
 }
 
 SITE_INFO = {
-    "name": "Pharmaceutical Company",
+    "name": "Industrial Client",
     "projects": "WERC Feedback · 15 August 2025",
     "catchment": "Water-stressed coastal catchment",
     "basin_stress_2025": "High",
     "basin_stress_2050": "Extremely High",
-    "processes": ["Oral Solid Dose (OSD) Manufacturing", "Small Volume Parenteral (SVP) Manufacturing"],
+    "processes": ["Carbonated Soft Drinks", "Still Beverages & Juices"],
     "current_demand_kl_d": 520.6,
     "future_demand_kl_d": 1973.0,
     "production_kg_pa": 3_142_103,

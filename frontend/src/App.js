@@ -63,7 +63,7 @@ const Gate = ({ onUnlock }) => {
                         Water risk, <span className="italic text-[var(--aspen-green)]">quantified.</span>
                     </h1>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                        A live scenario model for a <b>Pharmaceutical Company</b>, built on the WERC
+                        A live scenario model for an <b>Industrial Client</b>, built on the WERC
                         feedback study methodology. Explore business-as-usual exposure and run
                         strategic interventions from 2025 to 2050.
                     </p>
@@ -189,7 +189,7 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <div className="metric-label">Site processes</div>
-                            <h3 className="font-display text-xl font-medium mt-1">Pharmaceutical manufacturing</h3>
+                            <h3 className="font-display text-xl font-medium mt-1">Beverage manufacturing</h3>
                         </div>
                         <Factory className="w-6 h-6 text-[var(--aspen-green)]" />
                     </div>
@@ -202,8 +202,8 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                         ))}
                     </div>
                     <div className="mt-5 text-sm text-slate-600 leading-relaxed">
-                        Production pipeline includes NH<sub>3</sub> condensation (+827 kl/d), SVP3 expansion (+33%)
-                        and WTP upgrade (75% recovery). Annual production today: <b>{n0(site.production_kg_pa)} kg</b>.
+                        Production pipeline includes refrigeration upgrade (+827 kl/d cooling demand), Line 3 expansion (+33%)
+                        and WTP upgrade (75% recovery). Annual production today: <b>3.14 ML</b>.
                     </div>
                 </div>
 
@@ -297,8 +297,8 @@ const BauTab = ({ bau }) => {
                         <Bar dataKey="supply_recovered" name="Recovered" stackId="a" fill="#062C60" />
                         <Line type="monotone" dataKey="demand_total" name="Total demand" stroke="#062C60" strokeWidth={2.5} dot={{ r: 2 }} />
                         <Line type="monotone" dataKey="gw_availability" name="GW availability" stroke="#9D2C2C" strokeDasharray="5 4" strokeWidth={1.5} dot={false} />
-                        <ReferenceLine x={2026} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "2nd BH + NH₃", position: "top", fill: "#64748b", fontSize: 11 }} />
-                        <ReferenceLine x={2029} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "SVP3", position: "top", fill: "#64748b", fontSize: 11 }} />
+                        <ReferenceLine x={2026} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "2nd BH + Capacity uplift", position: "top", fill: "#64748b", fontSize: 11 }} />
+                        <ReferenceLine x={2029} stroke="#94a3b8" strokeDasharray="2 4" label={{ value: "Line 3 expansion", position: "top", fill: "#64748b", fontSize: 11 }} />
                     </ComposedChart>
                 </ResponsiveContainer>
             </div>
