@@ -80,7 +80,21 @@ input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;bac
 @media (max-width:900px){ .grid-3,.grid-4,.grid-5{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:560px){ .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr} }
 
-.hero-gradient{background:radial-gradient(ellipse at top right,rgba(17,113,184,.18) 0%,transparent 60%),radial-gradient(ellipse at top left,rgba(22,63,86,.10) 0%,transparent 55%),linear-gradient(180deg,#F6F8FB 0%,#E8EFF6 100%)}
+.hero-gradient{
+    background:
+        radial-gradient(ellipse 80% 60% at 80% 0%,rgba(17,113,184,.45) 0%,transparent 55%),
+        radial-gradient(ellipse 60% 50% at 0% 100%,rgba(22,63,86,.55) 0%,transparent 60%),
+        linear-gradient(135deg,#062C60 0%,#0A3A77 50%,#163F56 100%);
+    color:#F6FBFF; position:relative; overflow:hidden;
+}
+.hero-gradient::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:
+        radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
+        radial-gradient(rgba(201,224,239,.04) 1px,transparent 1px);
+    background-size:36px 36px,18px 18px; background-position:0 0,18px 18px;
+}
+.hero-gradient > *{ position:relative; z-index:1; }
 
 .droplet{display:inline-block;width:10px;height:10px;border-radius:50%}
 
@@ -96,21 +110,23 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
 <body>
 
 <!-- PASSWORD GATE -->
-<section id="gate" class="hero-gradient" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px">
+<section id="gate" class="hero-gradient" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px">
   <div style="max-width:460px;width:100%">
     <div style="margin-bottom:32px" class="fade-up">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
-        <img src="/talbot-logo.png" alt="Talbot" style="height:48px;width:auto">
-        <div style="width:1px;height:32px;background:#cbd5e1"></div>
+        <div style="background:#fff;border-radius:10px;padding:8px 12px;box-shadow:0 8px 20px rgba(0,0,0,.18)">
+          <img src="/talbot-logo.png" alt="Talbot" style="height:40px;width:auto;display:block">
+        </div>
+        <div style="width:1px;height:32px;background:rgba(255,255,255,.3)"></div>
         <div>
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:#64748b">Digital Twin</div>
-          <div class="font-display" style="font-size:18px;font-weight:600">WERC</div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:rgba(201,224,239,.85)">Digital Twin</div>
+          <div class="font-display" style="font-size:18px;font-weight:600;color:#fff">WERC</div>
         </div>
       </div>
-      <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 12px">Water risk, <span style="font-style:italic;color:var(--aspen-green)">quantified.</span></h1>
-      <p style="color:#475569;font-size:14px;line-height:1.6;margin:0">A live scenario model for an <b>Industrial Client</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
+      <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 12px;color:#fff">Water risk, <span style="font-style:italic;color:#C9E0EF">quantified.</span></h1>
+      <p style="color:rgba(201,224,239,.85);font-size:14px;line-height:1.6;margin:0">A live scenario model for an <b style="color:#fff">Industrial Client</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
     </div>
-    <form id="loginForm" class="card" style="padding:24px" onsubmit="handleLogin(event)">
+    <form id="loginForm" class="card" style="padding:24px;box-shadow:0 24px 48px rgba(6,44,96,.45)" onsubmit="handleLogin(event)">
       <label class="metric-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
         <i data-lucide="lock-keyhole" style="width:14px;height:14px"></i> Demo access passphrase
       </label>

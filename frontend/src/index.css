@@ -198,13 +198,28 @@ input[type="range"]::-moz-range-thumb {
 .fade-up-delay-2 { animation: fadeUp 500ms 160ms ease both; }
 .fade-up-delay-3 { animation: fadeUp 500ms 240ms ease both; }
 
-/* Header gradient accent */
+/* Branded gate — bold Talbot navy gradient (matches the dashboard hero card) */
 .hero-gradient {
     background:
-        radial-gradient(ellipse at top right, rgba(17,113,184,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse at top left,  rgba(22,63,86,0.10) 0%, transparent 55%),
-        linear-gradient(180deg, #F6F8FB 0%, #E8EFF6 100%);
+        radial-gradient(ellipse 80% 60% at 80% 0%, rgba(17,113,184,0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(22,63,86,0.55) 0%, transparent 60%),
+        linear-gradient(135deg, #062C60 0%, #0A3A77 50%, #163F56 100%);
+    color: #F6FBFF;
+    position: relative;
+    overflow: hidden;
 }
+.hero-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        radial-gradient(rgba(201,224,239,0.04) 1px, transparent 1px);
+    background-size: 36px 36px, 18px 18px;
+    background-position: 0 0, 18px 18px;
+    pointer-events: none;
+}
+.hero-gradient > * { position: relative; z-index: 1; }
 
 .droplet {
     display: inline-block; width: 10px; height: 10px; border-radius: 50%;

@@ -48,28 +48,30 @@ const Gate = ({ onUnlock }) => {
     };
 
     return (
-        <div className="min-h-screen hero-gradient flex items-center justify-center px-6" data-testid="password-gate">
+        <div className="min-h-screen hero-gradient flex items-center justify-center px-6 py-10" data-testid="password-gate">
             <div className="max-w-md w-full">
                 <div className="mb-10 fade-up">
                     <div className="flex items-center gap-3 mb-6">
-                        <img src="/talbot-logo.png" alt="Talbot" className="h-12 w-auto" data-testid="gate-talbot-logo" />
-                        <div className="h-8 w-px bg-slate-300" />
+                        <div className="bg-white rounded-lg px-3 py-2 shadow-lg shadow-black/10">
+                            <img src="/talbot-logo.png" alt="Talbot" className="h-10 w-auto" data-testid="gate-talbot-logo" />
+                        </div>
+                        <div className="h-8 w-px bg-white/30" />
                         <div>
-                            <div className="text-[11px] uppercase tracking-[0.2em] text-slate-500">Digital Twin</div>
-                            <div className="font-display text-lg font-semibold">WERC</div>
+                            <div className="text-[11px] uppercase tracking-[0.22em] text-sky-200/80">Digital Twin</div>
+                            <div className="font-display text-lg font-semibold text-white">WERC</div>
                         </div>
                     </div>
-                    <h1 className="font-display text-4xl font-medium leading-tight mb-3">
-                        Water risk, <span className="italic text-[var(--aspen-green)]">quantified.</span>
+                    <h1 className="font-display text-4xl font-medium leading-tight mb-3 text-white">
+                        Water risk, <span className="italic" style={{ color: "#C9E0EF" }}>quantified.</span>
                     </h1>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                        A live scenario model for an <b>Industrial Client</b>, built on the WERC
+                    <p className="text-sky-100/80 text-sm leading-relaxed">
+                        A live scenario model for an <b className="text-white">Industrial Client</b>, built on the WERC
                         feedback study methodology. Explore business-as-usual exposure and run
                         strategic interventions from 2025 to 2050.
                     </p>
                 </div>
 
-                <form onSubmit={submit} className="card p-6 fade-up-delay-1" data-testid="login-form">
+                <form onSubmit={submit} className="card p-6 fade-up-delay-1" data-testid="login-form" style={{ boxShadow: "0 24px 48px rgba(6,44,96,0.45)" }}>
                     <label className="metric-label flex items-center gap-2 mb-2">
                         <LockKeyhole className="w-3.5 h-3.5" /> Demo access passphrase
                     </label>
@@ -80,7 +82,7 @@ const Gate = ({ onUnlock }) => {
                         value={pwd}
                         onChange={(e) => setPwd(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full px-4 py-3 border border-[#e8e8e1] rounded-lg text-base focus:outline-none focus:border-[var(--aspen-green)] focus:ring-2 focus:ring-[var(--aspen-green)]/20"
+                        className="w-full px-4 py-3 border border-[#E2EAF1] rounded-lg text-base focus:outline-none focus:border-[var(--brand-primary)] focus:ring-2 focus:ring-[var(--brand-primary)]/20"
                     />
                     {err && (
                         <div className="mt-3 text-sm text-[var(--danger)] flex items-center gap-2" data-testid="login-error">
