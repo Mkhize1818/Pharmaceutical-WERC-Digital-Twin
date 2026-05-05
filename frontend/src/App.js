@@ -28,10 +28,23 @@ const n1 = (n) => isFinite(n) ? n.toFixed(1) : "–";
 // ---------------------------------------------------------------------------
 // PASSWORD GATE
 // ---------------------------------------------------------------------------
+const TAGLINES = [
+    "The Art of Water",
+    "Engineering water resilience",
+    "From risk to opportunity",
+    "Where every drop counts",
+];
+
 const Gate = ({ onUnlock }) => {
     const [pwd, setPwd] = useState("");
     const [err, setErr] = useState("");
     const [loading, setLoading] = useState(false);
+    const [tagIdx, setTagIdx] = useState(0);
+
+    useEffect(() => {
+        const t = setInterval(() => setTagIdx(i => (i + 1) % TAGLINES.length), 3800);
+        return () => clearInterval(t);
+    }, []);
 
     const submit = async (e) => {
         e.preventDefault();
@@ -48,7 +61,11 @@ const Gate = ({ onUnlock }) => {
     };
 
     return (
-        <div className="min-h-screen hero-gradient flex items-center justify-center px-6 py-10" data-testid="password-gate">
+        <div
+            className="min-h-screen hero-gradient flex items-center justify-center px-6 py-10"
+            data-testid="password-gate"
+        >
+            <div className="water-bg" style={{ backgroundImage: "url('/water-bg.png')" }} />
             <div className="max-w-md w-full">
                 <div className="mb-10 fade-up">
                     <div className="flex items-center gap-3 mb-6">
@@ -61,10 +78,15 @@ const Gate = ({ onUnlock }) => {
                             <div className="font-display text-lg font-semibold text-white">WERC</div>
                         </div>
                     </div>
-                    <h1 className="font-display text-4xl font-medium leading-tight mb-3 text-white">
+                    <h1 className="font-display text-4xl font-medium leading-tight mb-2 text-white">
                         Water risk, <span className="italic" style={{ color: "#C9E0EF" }}>quantified.</span>
                     </h1>
-                    <p className="text-sky-100/80 text-sm leading-relaxed">
+                    <div className="tagline-rotator font-display text-base text-sky-100/85 italic mb-4" data-testid="tagline-rotator">
+                        {TAGLINES.map((t, i) => (
+                            <span key={i} className={`tagline ${i === tagIdx ? "active" : ""}`}>— {t}</span>
+                        ))}
+                    </div>
+                    <p className="text-sky-100/85 text-sm leading-relaxed" style={{ textShadow: "0 1px 2px rgba(6,44,96,0.4)" }}>
                         A live scenario model for an <b className="text-white">Industrial Client</b>, built on the WERC
                         feedback study methodology. Explore business-as-usual exposure and run
                         strategic interventions from 2025 to 2050.

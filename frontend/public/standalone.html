@@ -81,20 +81,28 @@ input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;bac
 @media (max-width:560px){ .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr} }
 
 .hero-gradient{
-    background:
-        radial-gradient(ellipse 80% 60% at 80% 0%,rgba(17,113,184,.45) 0%,transparent 55%),
-        radial-gradient(ellipse 60% 50% at 0% 100%,rgba(22,63,86,.55) 0%,transparent 60%),
-        linear-gradient(135deg,#062C60 0%,#0A3A77 50%,#163F56 100%);
+    background-color:#062C60;
     color:#F6FBFF; position:relative; overflow:hidden;
 }
-.hero-gradient::before{
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background-image:
-        radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px),
-        radial-gradient(rgba(201,224,239,.04) 1px,transparent 1px);
-    background-size:36px 36px,18px 18px; background-position:0 0,18px 18px;
+.hero-gradient .water-bg{
+    position:absolute; inset:-30px;
+    background-image:url('/water-bg.png');
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+    filter:blur(14px) brightness(.85) saturate(1.1);
+    transform:scale(1.08); z-index:0;
 }
-.hero-gradient > *{ position:relative; z-index:1; }
+.hero-gradient::after{
+    content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:
+        radial-gradient(ellipse 70% 70% at 50% 50%,rgba(6,44,96,.45) 0%,rgba(6,44,96,.20) 50%,transparent 85%),
+        linear-gradient(135deg,rgba(6,44,96,.40) 0%,rgba(17,113,184,.10) 50%,rgba(22,63,86,.40) 100%),
+        linear-gradient(180deg,rgba(6,44,96,.20) 0%,transparent 30%,transparent 70%,rgba(6,44,96,.30) 100%);
+}
+.hero-gradient > *:not(.water-bg){ position:relative; z-index:2; }
+
+.tagline-rotator{position:relative;height:1.4em;overflow:hidden;margin-top:.6rem}
+.tagline-rotator .tagline{position:absolute;inset:0;opacity:0;transform:translateY(8px);transition:opacity .6s ease, transform .6s ease}
+.tagline-rotator .tagline.active{opacity:1;transform:translateY(0)}
 
 .droplet{display:inline-block;width:10px;height:10px;border-radius:50%}
 
@@ -111,6 +119,7 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
 
 <!-- PASSWORD GATE -->
 <section id="gate" class="hero-gradient" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px">
+  <div class="water-bg"></div>
   <div style="max-width:460px;width:100%">
     <div style="margin-bottom:32px" class="fade-up">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
@@ -123,8 +132,14 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
           <div class="font-display" style="font-size:18px;font-weight:600;color:#fff">WERC</div>
         </div>
       </div>
-      <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 12px;color:#fff">Water risk, <span style="font-style:italic;color:#C9E0EF">quantified.</span></h1>
-      <p style="color:rgba(201,224,239,.85);font-size:14px;line-height:1.6;margin:0">A live scenario model for an <b style="color:#fff">Industrial Client</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
+      <h1 class="font-display" style="font-size:40px;font-weight:500;line-height:1.1;margin:0 0 8px;color:#fff">Water risk, <span style="font-style:italic;color:#C9E0EF">quantified.</span></h1>
+      <div class="tagline-rotator font-display" id="taglineRotator" style="font-size:16px;color:rgba(201,224,239,.9);font-style:italic;margin-bottom:14px">
+        <span class="tagline active">— The Art of Water</span>
+        <span class="tagline">— Engineering water resilience</span>
+        <span class="tagline">— From risk to opportunity</span>
+        <span class="tagline">— Where every drop counts</span>
+      </div>
+      <p style="color:rgba(201,224,239,.85);font-size:14px;line-height:1.6;margin:0;text-shadow:0 1px 2px rgba(6,44,96,.4)">A live scenario model for an <b style="color:#fff">Industrial Client</b>, built on the WERC feedback study methodology. Explore business-as-usual exposure and run strategic interventions from 2025 to 2050.</p>
     </div>
     <form id="loginForm" class="card" style="padding:24px;box-shadow:0 24px 48px rgba(6,44,96,.45)" onsubmit="handleLogin(event)">
       <label class="metric-label" style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
@@ -866,7 +881,20 @@ async function downloadPDF(){
     }
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{ lucide.createIcons(); });
+document.addEventListener('DOMContentLoaded', ()=>{ 
+    lucide.createIcons();
+    // Tagline rotator on gate
+    const rot = document.getElementById('taglineRotator');
+    if(rot){
+        const items = rot.querySelectorAll('.tagline');
+        let idx = 0;
+        setInterval(()=>{
+            items[idx].classList.remove('active');
+            idx = (idx + 1) % items.length;
+            items[idx].classList.add('active');
+        }, 3800);
+    }
+});
 </script>
 </body>
 </html>

@@ -198,28 +198,55 @@ input[type="range"]::-moz-range-thumb {
 .fade-up-delay-2 { animation: fadeUp 500ms 160ms ease both; }
 .fade-up-delay-3 { animation: fadeUp 500ms 240ms ease both; }
 
-/* Branded gate — bold Talbot navy gradient (matches the dashboard hero card) */
+/* Branded gate — water photo background with strong blur to hide any
+   form/text content that may be embedded in the source image. */
 .hero-gradient {
-    background:
-        radial-gradient(ellipse 80% 60% at 80% 0%, rgba(17,113,184,0.45) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(22,63,86,0.55) 0%, transparent 60%),
-        linear-gradient(135deg, #062C60 0%, #0A3A77 50%, #163F56 100%);
+    background-color: #062C60;
     color: #F6FBFF;
     position: relative;
     overflow: hidden;
 }
-.hero-gradient::before {
+.hero-gradient .water-bg {
+    position: absolute;
+    inset: -30px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(14px) brightness(0.85) saturate(1.1);
+    transform: scale(1.08);
+    z-index: 0;
+}
+.hero-gradient::after {
     content: "";
     position: absolute;
     inset: 0;
-    background-image:
-        radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-        radial-gradient(rgba(201,224,239,0.04) 1px, transparent 1px);
-    background-size: 36px 36px, 18px 18px;
-    background-position: 0 0, 18px 18px;
     pointer-events: none;
+    z-index: 1;
+    background:
+        radial-gradient(ellipse 70% 70% at 50% 50%, rgba(6,44,96,0.45) 0%, rgba(6,44,96,0.20) 50%, transparent 85%),
+        linear-gradient(135deg, rgba(6,44,96,0.40) 0%, rgba(17,113,184,0.10) 50%, rgba(22,63,86,0.40) 100%),
+        linear-gradient(180deg, rgba(6,44,96,0.20) 0%, transparent 30%, transparent 70%, rgba(6,44,96,0.30) 100%);
 }
-.hero-gradient > * { position: relative; z-index: 1; }
+.hero-gradient > *:not(.water-bg) { position: relative; z-index: 2; }
+
+/* Rotating tagline */
+.tagline-rotator {
+    position: relative;
+    height: 1.4em;
+    overflow: hidden;
+    margin-top: 0.6rem;
+}
+.tagline-rotator .tagline {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 600ms ease, transform 600ms ease;
+}
+.tagline-rotator .tagline.active {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 .droplet {
     display: inline-block; width: 10px; height: 10px; border-radius: 50%;
