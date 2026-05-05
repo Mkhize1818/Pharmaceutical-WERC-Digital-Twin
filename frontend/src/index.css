@@ -198,22 +198,19 @@ input[type="range"]::-moz-range-thumb {
 .fade-up-delay-2 { animation: fadeUp 500ms 160ms ease both; }
 .fade-up-delay-3 { animation: fadeUp 500ms 240ms ease both; }
 
-/* Branded gate — water photo background with strong blur to hide any
-   form/text content that may be embedded in the source image. */
+/* Branded gate — clean Talbot water photo, displayed sharp. */
 .hero-gradient {
-    background-color: #062C60;
+    background-color: #C9E0EF;
     color: #F6FBFF;
     position: relative;
     overflow: hidden;
 }
 .hero-gradient .water-bg {
     position: absolute;
-    inset: -30px;
+    inset: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(14px) brightness(0.85) saturate(1.1);
-    transform: scale(1.08);
     z-index: 0;
 }
 .hero-gradient::after {
@@ -223,9 +220,8 @@ input[type="range"]::-moz-range-thumb {
     pointer-events: none;
     z-index: 1;
     background:
-        radial-gradient(ellipse 70% 70% at 50% 50%, rgba(6,44,96,0.45) 0%, rgba(6,44,96,0.20) 50%, transparent 85%),
-        linear-gradient(135deg, rgba(6,44,96,0.40) 0%, rgba(17,113,184,0.10) 50%, rgba(22,63,86,0.40) 100%),
-        linear-gradient(180deg, rgba(6,44,96,0.20) 0%, transparent 30%, transparent 70%, rgba(6,44,96,0.30) 100%);
+        linear-gradient(180deg, rgba(6,44,96,0.55) 0%, rgba(6,44,96,0.30) 38%, rgba(6,44,96,0.10) 60%, transparent 100%),
+        linear-gradient(135deg, rgba(6,44,96,0.20) 0%, rgba(17,113,184,0.05) 50%, rgba(22,63,86,0.20) 100%);
 }
 .hero-gradient > *:not(.water-bg) { position: relative; z-index: 2; }
 

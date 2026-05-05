@@ -65,7 +65,7 @@ const Gate = ({ onUnlock }) => {
             className="min-h-screen hero-gradient flex items-center justify-center px-6 py-10"
             data-testid="password-gate"
         >
-            <div className="water-bg" style={{ backgroundImage: "url('/water-bg.png')" }} />
+            <div className="water-bg" style={{ backgroundImage: "url('/water-bg.jpg')" }} />
             <div className="max-w-md w-full">
                 <div className="mb-10 fade-up">
                     <div className="flex items-center gap-3 mb-6">

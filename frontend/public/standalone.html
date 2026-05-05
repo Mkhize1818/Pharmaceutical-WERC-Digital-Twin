@@ -81,22 +81,20 @@ input[type=range]::-moz-range-thumb{height:20px;width:20px;border-radius:50%;bac
 @media (max-width:560px){ .grid-2,.grid-3,.grid-4,.grid-5{grid-template-columns:1fr} }
 
 .hero-gradient{
-    background-color:#062C60;
+    background-color:#C9E0EF;
     color:#F6FBFF; position:relative; overflow:hidden;
 }
 .hero-gradient .water-bg{
-    position:absolute; inset:-30px;
-    background-image:url('/water-bg.png');
+    position:absolute; inset:0;
+    background-image:url('/water-bg.jpg');
     background-size:cover; background-position:center; background-repeat:no-repeat;
-    filter:blur(14px) brightness(.85) saturate(1.1);
-    transform:scale(1.08); z-index:0;
+    z-index:0;
 }
 .hero-gradient::after{
     content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
     background:
-        radial-gradient(ellipse 70% 70% at 50% 50%,rgba(6,44,96,.45) 0%,rgba(6,44,96,.20) 50%,transparent 85%),
-        linear-gradient(135deg,rgba(6,44,96,.40) 0%,rgba(17,113,184,.10) 50%,rgba(22,63,86,.40) 100%),
-        linear-gradient(180deg,rgba(6,44,96,.20) 0%,transparent 30%,transparent 70%,rgba(6,44,96,.30) 100%);
+        linear-gradient(180deg,rgba(6,44,96,.55) 0%,rgba(6,44,96,.30) 38%,rgba(6,44,96,.10) 60%,transparent 100%),
+        linear-gradient(135deg,rgba(6,44,96,.20) 0%,rgba(17,113,184,.05) 50%,rgba(22,63,86,.20) 100%);
 }
 .hero-gradient > *:not(.water-bg){ position:relative; z-index:2; }
 
