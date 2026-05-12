@@ -232,7 +232,7 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
         </div>
       </div>
 
-      <div class="grid" style="grid-template-columns:2fr 1fr;gap:24px">
+      <div class="grid" style="grid-template-columns:2fr 1fr 1fr;gap:24px">
         <div class="card" style="padding:24px">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
             <div>
@@ -264,6 +264,19 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
             <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Riverine flood risk</span><span class="chip chip-danger">High</span></div>
             <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="color:#475569">Coastal eutrophication</span><span class="chip chip-warn">High</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:#475569">Groundwater quality</span><span class="chip">Good</span></div>
+          </div>
+        </div>
+        <div class="card" style="padding:24px" id="impactCard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div class="metric-label">Business impact</div>
+            <i data-lucide="alert-triangle" style="width:18px;height:18px;color:var(--warn)"></i>
+          </div>
+          <div style="font-size:14px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px" title="Baseline water stress"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#9D2C2C;box-shadow:0 0 0 3px rgba(157,44,44,.15);flex-shrink:0"></span><span style="color:#334155;line-height:1.35">Production curtailment</span></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px" title="Inter-annual variability"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#C4651E;box-shadow:0 0 0 3px rgba(196,101,30,.18);flex-shrink:0"></span><span style="color:#334155;line-height:1.35">Planning uncertainty</span></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px" title="Riverine flood risk"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#9D2C2C;box-shadow:0 0 0 3px rgba(157,44,44,.15);flex-shrink:0"></span><span style="color:#334155;line-height:1.35">Operational downtime</span></div>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px" title="Coastal eutrophication"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#C4651E;box-shadow:0 0 0 3px rgba(196,101,30,.18);flex-shrink:0"></span><span style="color:#334155;line-height:1.35">Treatment disruption</span></div>
+            <div style="display:flex;align-items:center;gap:12px" title="Groundwater quality"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#15803D;box-shadow:0 0 0 3px rgba(21,128,61,.18);flex-shrink:0"></span><span style="color:#334155;line-height:1.35">Cost optimisation opportunity</span></div>
           </div>
         </div>
       </div>
@@ -394,6 +407,62 @@ footer{border-top:1px solid #E2EAF1;padding:24px;text-align:center;font-size:12p
                 <div style="font-size:12px;color:#64748b;margin-top:2px">R52.5m CAPEX · 1000 kl/d · 32% from 2040</div>
               </div>
               <label class="switch"><input id="desalToggle" type="checkbox"><span class="track"></span></label>
+            </div>
+          </div>
+
+          <!-- Model assumptions -->
+          <div class="card" style="padding:20px" id="assumptionsCard">
+            <div style="margin-bottom:14px">
+              <div class="metric-label">Model assumptions</div>
+              <h3 class="font-display" style="font-size:15px;font-weight:600;margin:4px 0 0">Tune the underlying drivers</h3>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div>
+                  <div style="font-size:13px;font-weight:500">Water Use Ratio (WUR)</div>
+                  <div style="font-size:11px;color:#64748b">kl consumed per kg produced</div>
+                </div>
+                <div class="font-display" id="wurVal" style="font-size:17px;color:#1171B8">0.064<span style="font-size:11px;color:#94a3b8"> kl/kg</span></div>
+              </div>
+              <input id="wurSlider" type="range" min="0" max="3" step="0.001" value="0.064" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:2px"><span>0 kl/kg</span><span>3 kl/kg</span></div>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div>
+                  <div style="font-size:13px;font-weight:500">Max annual production</div>
+                  <div style="font-size:11px;color:#64748b">Production ceiling (KT/yr)</div>
+                </div>
+                <div class="font-display" id="prodVal" style="font-size:17px;color:#163F56">5.1<span style="font-size:11px;color:#94a3b8"> KT</span></div>
+              </div>
+              <input id="prodSlider" type="range" min="0.5" max="10" step="0.1" value="5.1" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:2px"><span>0.5 KT</span><span>10 KT</span></div>
+            </div>
+
+            <div style="margin-bottom:14px">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div>
+                  <div style="font-size:13px;font-weight:500">Tariff escalation</div>
+                  <div style="font-size:11px;color:#64748b">Annual municipal tariff growth</div>
+                </div>
+                <div class="font-display" id="tariffEscVal" style="font-size:17px;color:#4A90D9">6.0<span style="font-size:11px;color:#94a3b8">%</span></div>
+              </div>
+              <input id="tariffEscSlider" type="range" min="0" max="15" step="0.5" value="6" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:2px"><span>0%</span><span>15%</span></div>
+            </div>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-start">
+                <div>
+                  <div style="font-size:13px;font-weight:500">Treatment cost escalation</div>
+                  <div style="font-size:11px;color:#64748b">Annual treatment cost growth</div>
+                </div>
+                <div class="font-display" id="treatEscVal" style="font-size:17px;color:#062C60">9.36<span style="font-size:11px;color:#94a3b8">%</span></div>
+              </div>
+              <input id="treatEscSlider" type="range" min="0" max="20" step="0.5" value="9.36" style="margin-top:8px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-top:2px"><span>0%</span><span>20%</span></div>
             </div>
           </div>
         </div>
@@ -532,21 +601,39 @@ function activeReduction(year, rw, gw, wr, sm, desal){
     return Math.min(r,0.9);
 }
 
-function computeScenario(rw,gw,wr,sm,desal){
+// Base 2025 cost ratio components (50/50 split of 55.65 R/kl)
+const TARIFF_2025_RKL = 27.83;
+const TREAT_2025_RKL  = 27.82;
+const TREAT_REF       = 0.0936;
+
+function computeScenario(rw,gw,wr,sm,desal,wur,maxProd,tariffEsc,treatEsc){
     const rows=[]; let cum=0, cumBau=0, cumStrat=0;
-    const fullStack = sm && desal && rw>=10 && gw>=20 && wr>=40;
+    const fullStack = sm && desal && rw>=10 && gw>=20 && wr>=40
+                      && Math.abs(tariffEsc-0.06)<0.005 && Math.abs(treatEsc-TREAT_REF)<0.005;
+    const wurMult = wur>0 ? wur/0.064 : 0;
+    const maxAnnualKl = maxProd * 1_000_000 * wur;
+
     for (const y of YEARS){
-        const red = activeReduction(y,rw,gw,wr,sm,desal);
-        const bau = BAU_TRUE[y];
-        let strat = BAU_COST_RATIO[y] + BAU_RISK[y]*(1-red);
+        const dy = y - 2025;
+        const tariff_y    = TARIFF_2025_RKL * Math.pow(1+tariffEsc, dy);
+        const treatment_y = TREAT_2025_RKL  * Math.pow(1+treatEsc,  dy);
+        const costRatio   = tariff_y + treatment_y;
+        const riskScale   = Math.pow((1+treatEsc)/(1+TREAT_REF), dy);
+        const riskCost    = BAU_RISK[y] * riskScale;
+        const bau         = costRatio + riskCost;
+        const red         = activeReduction(y,rw,gw,wr,sm,desal);
+        let strat         = costRatio + riskCost * (1-red);
         if(fullStack) strat = Math.min(strat, STRAT_TRUE[y]);
-        const annualKl = BAU_DAILY[y][0]*365;
+
+        let annualKl = BAU_DAILY[y][0] * 365 * wurMult;
+        annualKl = Math.min(annualKl, maxAnnualKl);
+
         const sav = Math.max(0,(bau-strat)*annualKl);
         cum+=sav; cumBau+=bau*annualKl; cumStrat+=strat*annualKl;
         rows.push({year:y, bau, strat, red:red*100, annualSav:sav, cumSav:cum});
     }
     return { rows, cum, cumBau, cumStrat, red2050: activeReduction(2050,rw,gw,wr,sm,desal)*100,
-             bau2050: BAU_TRUE[2050], strat2050: rows[rows.length-1].strat };
+             bau2050: rows[rows.length-1].bau, strat2050: rows[rows.length-1].strat };
 }
 
 // =========================================================================
@@ -725,17 +812,29 @@ function updateSim(){
     const wr = +document.getElementById('wrSlider').value;
     const sm = document.getElementById('smToggle').checked;
     const desal = document.getElementById('desalToggle').checked;
+    const wur = +document.getElementById('wurSlider').value;
+    const maxProd = +document.getElementById('prodSlider').value;
+    const tariffEsc = (+document.getElementById('tariffEscSlider').value) / 100;
+    const treatEsc  = (+document.getElementById('treatEscSlider').value) / 100;
 
     // slider fills
     document.getElementById('rwSlider').style.setProperty('--pct', (rw/30)*100+'%');
     document.getElementById('gwSlider').style.setProperty('--pct', (gw/50)*100+'%');
     document.getElementById('wrSlider').style.setProperty('--pct', (wr/70)*100+'%');
+    document.getElementById('wurSlider').style.setProperty('--pct', (wur/3)*100+'%');
+    document.getElementById('prodSlider').style.setProperty('--pct', ((maxProd-0.5)/9.5)*100+'%');
+    document.getElementById('tariffEscSlider').style.setProperty('--pct', ((+document.getElementById('tariffEscSlider').value)/15)*100+'%');
+    document.getElementById('treatEscSlider').style.setProperty('--pct', ((+document.getElementById('treatEscSlider').value)/20)*100+'%');
 
     document.getElementById('rwVal').innerHTML = rw+'<span style="font-size:13px;color:#94a3b8">%</span>';
     document.getElementById('gwVal').innerHTML = gw+'<span style="font-size:13px;color:#94a3b8">%</span>';
     document.getElementById('wrVal').innerHTML = wr+'<span style="font-size:13px;color:#94a3b8">%</span>';
+    document.getElementById('wurVal').innerHTML       = wur.toFixed(3)+'<span style="font-size:11px;color:#94a3b8"> kl/kg</span>';
+    document.getElementById('prodVal').innerHTML      = maxProd.toFixed(1)+'<span style="font-size:11px;color:#94a3b8"> KT</span>';
+    document.getElementById('tariffEscVal').innerHTML = (tariffEsc*100).toFixed(1)+'<span style="font-size:11px;color:#94a3b8">%</span>';
+    document.getElementById('treatEscVal').innerHTML  = (treatEsc*100).toFixed(2)+'<span style="font-size:11px;color:#94a3b8">%</span>';
 
-    const s = computeScenario(rw,gw,wr,sm,desal);
+    const s = computeScenario(rw,gw,wr,sm,desal,wur,maxProd,tariffEsc,treatEsc);
 
     // Projection chart
     if(charts.proj){
@@ -767,7 +866,7 @@ function updateSim(){
 
 function init(){
     lucide.createIcons();
-    ['rwSlider','gwSlider','wrSlider','smToggle','desalToggle'].forEach(id=>{
+    ['rwSlider','gwSlider','wrSlider','smToggle','desalToggle','wurSlider','prodSlider','tariffEscSlider','treatEscSlider'].forEach(id=>{
         document.getElementById(id).addEventListener('input', updateSim);
         document.getElementById(id).addEventListener('change', updateSim);
     });
@@ -775,6 +874,10 @@ function init(){
     document.getElementById('rwSlider').style.setProperty('--pct','33.3%');
     document.getElementById('gwSlider').style.setProperty('--pct','40%');
     document.getElementById('wrSlider').style.setProperty('--pct','57.1%');
+    document.getElementById('wurSlider').style.setProperty('--pct','2.1%');
+    document.getElementById('prodSlider').style.setProperty('--pct','48.4%');
+    document.getElementById('tariffEscSlider').style.setProperty('--pct','40%');
+    document.getElementById('treatEscSlider').style.setProperty('--pct','46.8%');
 }
 
 // =========================================================================

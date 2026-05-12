@@ -287,6 +287,11 @@ class ScenarioReq(BaseModel):
     water_recovery_pct: float = Field(0.40, ge=0, le=0.8)
     smart_metering_on: bool = True
     desalination_on: bool = False
+    # ----- new assumption inputs (defaults reproduce the original curves) -----
+    wur_kl_per_kg: float = Field(0.064, ge=0, le=3.0)
+    max_production_kt: float = Field(5.1, ge=0.1, le=20.0)        # kilotonnes/yr
+    tariff_escalation: float = Field(0.06, ge=0.0, le=0.15)
+    treatment_escalation: float = Field(0.0936, ge=0.0, le=0.20)
 
 
 def _active_reduction(year: int, req: ScenarioReq) -> float:
@@ -306,42 +311,79 @@ def _active_reduction(year: int, req: ScenarioReq) -> float:
     return min(red, 0.90)
 
 
+# Base components of 2025 cost ratio that respond to the two escalation rates.
+# Split 50/50 from BAU_COST_RATIO[2025] = 55.65 R/kl.
+_TARIFF_2025_RKL = 27.83
+_TREAT_2025_RKL  = 27.82
+# Reference escalation rates that produced the hardcoded BAU_COST_RATIO curve.
+_TARIFF_REF      = 0.06
+_TREAT_REF       = 0.0936
+
+
+def _projection(req: ScenarioReq):
+    """Compute BAU & strategic R/kl curves using the user-supplied assumptions."""
+    rows = []
+    for y in YEARS:
+        dy = y - 2025
+        # Cost ratio rebuilt from two escalating components
+        tariff_y    = _TARIFF_2025_RKL * (1 + req.tariff_escalation)    ** dy
+        treatment_y = _TREAT_2025_RKL  * (1 + req.treatment_escalation) ** dy
+        cost_ratio  = tariff_y + treatment_y
+        # Risk cost = original risk profile re-scaled by user treatment escalation
+        risk_scale  = ((1 + req.treatment_escalation) / (1 + _TREAT_REF)) ** dy if dy >= 0 else 1.0
+        risk_cost   = BAU_RISK_COST[y] * risk_scale
+        bau_true    = cost_ratio + risk_cost
+        rows.append((y, cost_ratio, risk_cost, bau_true))
+    return rows
+
+
 @api.post("/aspen/scenario")
 async def scenario(req: ScenarioReq):
     """Simulate strategic outlook based on user-toggled initiatives."""
+    proj = _projection(req)
+    # Consumption scaling: user WUR (kl/kg) vs reference 0.064, capped by max production
+    wur_mult = req.wur_kl_per_kg / 0.064 if 0.064 > 0 else 1.0
+    # Max annual consumption from max production cap (kt → kg) × wur (kl/kg)
+    max_annual_kl = req.max_production_kt * 1_000_000 * req.wur_kl_per_kg
+
     rows = []
     cum_savings = 0.0
     cum_bau_cost = 0.0
     cum_strat_cost = 0.0
-    for y in YEARS:
+    for (y, cost_ratio, risk_cost, bau_true) in proj:
         reduction = _active_reduction(y, req)
-        bau = BAU_TRUE_COST[y]
-        # Strategic cost: base water cost ratio stays, but risk cost is scaled down by reduction
-        strat_risk = BAU_RISK_COST[y] * (1 - reduction)
-        strat = BAU_COST_RATIO[y] + strat_risk
+        # Strategic cost: base water cost ratio stays, but risk cost scales down by reduction
+        strat = cost_ratio + risk_cost * (1 - reduction)
 
-        # Floor the strategic at reference Strategic Model numbers when the full stack is active
-        if req.smart_metering_on and req.desalination_on and \
-           req.rainwater_pct >= 0.10 and req.groundwater_pct >= 0.20 and req.water_recovery_pct >= 0.40:
+        # Floor the strategic at the reference STRAT curve when the full stack is active
+        # (only applies when escalation rates are near defaults so reference still makes sense)
+        if (req.smart_metering_on and req.desalination_on
+                and req.rainwater_pct >= 0.10 and req.groundwater_pct >= 0.20
+                and req.water_recovery_pct >= 0.40
+                and abs(req.tariff_escalation - _TARIFF_REF) < 0.005
+                and abs(req.treatment_escalation - _TREAT_REF) < 0.005):
             strat = min(strat, STRAT_TRUE_COST[y])
 
-        # Annual consumption (kl/yr) — from BaU daily total × 365
-        annual_kl = BAU_DAILY[y][0] * 365
-        savings_kl = annual_kl * reduction
-        savings_zar = (bau - strat) * annual_kl
+        # Annual consumption (kl/yr) — base BaU daily × 365, scaled by WUR multiplier, capped by max prod
+        annual_kl = BAU_DAILY[y][0] * 365 * wur_mult
+        annual_kl = min(annual_kl, max_annual_kl)
 
-        cum_savings += max(0, savings_zar)
-        cum_bau_cost += bau * annual_kl
+        savings_kl = annual_kl * reduction
+        savings_zar = (bau_true - strat) * annual_kl
+
+        cum_savings    += max(0, savings_zar)
+        cum_bau_cost   += bau_true * annual_kl
         cum_strat_cost += strat * annual_kl
 
         rows.append({
             "year": y,
-            "bau_true_cost": round(bau, 2),
+            "bau_true_cost": round(bau_true, 2),
             "strategic_true_cost": round(strat, 2),
             "reduction_pct": round(reduction * 100, 1),
             "annual_savings_zar": round(max(0, savings_zar), 0),
             "cumulative_savings_zar": round(cum_savings, 0),
             "volume_saved_kl": round(savings_kl, 0),
+            "annual_consumption_kl": round(annual_kl, 0),
         })
 
     return {
@@ -352,7 +394,7 @@ async def scenario(req: ScenarioReq):
             "cumulative_bau_cost_zar_bn": round(cum_bau_cost / 1e9, 2),
             "cumulative_strategic_cost_zar_bn": round(cum_strat_cost / 1e9, 2),
             "reduction_pct_2050": round(_active_reduction(2050, req) * 100, 1),
-            "final_true_cost_2050_bau": BAU_TRUE_COST[2050],
+            "final_true_cost_2050_bau": rows[-1]["bau_true_cost"],
             "final_true_cost_2050_strategic": rows[-1]["strategic_true_cost"],
         },
         "settings": req.model_dump(),

@@ -1,0 +1,31 @@
+{
+  "summary": "End-to-end retest of the two new features: (1) four new ScenarioReq assumption inputs (wur_kl_per_kg, max_production_kt, tariff_escalation, treatment_escalation) on POST /api/aspen/scenario, and (2) the new 'Business impact' card on Overview with 5 traffic-light rows. Backend: 8/8 pytest cases pass — defaults return exactly R 1.19 bn cumulative savings, BAU 2050 = 778.88 R/kl, Strategic 2050 = 467.71 R/kl as specified; WUR=0.5 drives savings to R 9.27 bn (>R 5 bn requirement); tariff_escalation=0 lowers BAU 2050; treatment_escalation=0.20 raises BAU 2050. Frontend (React): assumptions-card with the 4 sliders renders, every slider triggers a fresh /api/aspen/scenario fetch and KPI/chart update within ~600 ms. Overview impact-card sits in 4-col grid (Process(2)+Risks(1)+Impact(1)) with exactly 2 red, 2 amber, 1 green dots and correct text mapping. Standalone.html: impact card on Overview present, the 4 new sliders (#wurSlider/#prodSlider/#tariffEscSlider/#treatEscSlider) update the chart live, no raw-JS leak (iteration-3 trailing-DOM bug verified fixed), single </html> tag, no page errors, PDF button present. Password gate (aspen2050) and all 5 tabs work on both builds. NO REGRESSIONS.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_scenario_assumptions.py",
+    "/app/test_reports/pytest/scenario_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "App.js still 1014 lines — over the 700-line guideline. Recommend splitting OverviewTab, BauTab, SimulatorTab, SavingsTab into separate files under src/components/tabs/.",
+    "server.py mixes static data tables (BAU_DAILY, BAU_COST_RATIO, STRAT_TRUE_COST, INITIATIVES, TARIFFS_2025, etc.) with route handlers — the data tables (~150 lines) should live in /app/backend/data/model_constants.py for cleaner separation and easier client-driven updates.",
+    "Standalone.html (~880 lines) duplicates the entire computeScenario() math from the backend in pure JS. Any future change to _projection() in server.py must be hand-mirrored in standalone.html which is fragile (iteration 3 already caught a stale chart color set there). Consider serving the standalone build a single JSON snapshot at build time or fetching /api/aspen/scenario like the React app does.",
+    "Slider debounce: React SimulatorTab fires a fetch on every onChange; the spec says 250ms debounce. Did not measure debounce timing precisely but UI feels responsive — recommend adding an explicit setTimeout-based debounce hook so rapid drags don't flood the backend.",
+    "Floor logic in _projection / scenario(): the strict equality check `abs(req.treatment_escalation - 0.0936) < 0.005` floors strategic to STRAT_TRUE_COST only at defaults. This is brittle — if Pydantic default is later changed by one digit the floor silently disengages. Replace with an explicit `if req.tariff_escalation == _TARIFF_REF and req.treatment_escalation == _TREAT_REF` using the constants already defined."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_scenario_assumptions.py (created)"
+  ],
+  "success_rate": { "backend": "100% (8/8)", "frontend": "100% (impact card, 4 sliders, live updates, PDF, gate, all 5 tabs on both builds)" },
+  "test_credentials": "Demo password: aspen2050 (validated against /api/auth/login and both UI gates)",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Two features delivered cleanly. Backend math at defaults verified: cumulative_savings_zar_bn=1.19, final_true_cost_2050_bau=778.88, final_true_cost_2050_strategic=467.71 (settings: rainwater 0.10, groundwater 0.20, water_recovery 0.40, smart_metering on, desalination OFF, wur 0.064, max_prod 5.1 KT, tariff_esc 0.06, treat_esc 0.0936). With desalination_on=True (full stack) the floor to STRAT_TRUE_COST[2050]=335.07 engages and cumulative savings rises to R 1.74 bn — this matches the special-case logic in server.py L360-365. Standalone computeScenario() gives slightly different cum savings at extreme WUR (R 9.48 bn vs React R 9.27 bn) — both pass the >R 5bn threshold but the implementations have ~2% drift that could be reconciled if pixel-perfect parity matters. iteration-3 trailing-DOM bug confirmed fixed: single </html>, no leaked JS fragment in body innerText.",
+  "rca of the issue": "N/A — no bugs found. All review_request test cases pass."
+}

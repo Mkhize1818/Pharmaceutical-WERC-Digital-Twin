@@ -208,7 +208,7 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
             </div>
 
             {/* Process + Risk split */}
-            <div className="grid md:grid-cols-3 gap-6 fade-up-delay-2">
+            <div className="grid md:grid-cols-4 gap-6 fade-up-delay-2">
                 <div className="card p-6 md:col-span-2">
                     <div className="flex items-center justify-between mb-4">
                         <div>
@@ -247,6 +247,33 @@ const Overview = ({ site, bau, tc, onGoTo }) => {
                             <div key={k} className="flex justify-between items-center">
                                 <span className="text-slate-600">{k}</span>
                                 <span className={`chip ${cls}`}>{v}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="card p-6" data-testid="impact-card">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="metric-label">Business impact</div>
+                        <AlertTriangle className="w-5 h-5 text-[var(--warn)]" />
+                    </div>
+                    <div className="space-y-3 text-sm">
+                        {[
+                            { impact: "Production curtailment",      tone: "red",   tip: "Baseline water stress" },
+                            { impact: "Planning uncertainty",        tone: "amber", tip: "Inter-annual variability" },
+                            { impact: "Operational downtime",        tone: "red",   tip: "Riverine flood risk" },
+                            { impact: "Treatment disruption",        tone: "amber", tip: "Coastal eutrophication" },
+                            { impact: "Cost optimisation opportunity", tone: "green", tip: "Groundwater quality" },
+                        ].map(({ impact, tone, tip }, i) => (
+                            <div key={i} className="flex items-center gap-3" data-testid={`impact-${tone}`} title={tip}>
+                                <span
+                                    className="inline-block w-3 h-3 rounded-full flex-shrink-0"
+                                    style={{
+                                        background: tone === "red" ? "#9D2C2C" : tone === "amber" ? "#C4651E" : "#15803D",
+                                        boxShadow: `0 0 0 3px ${tone === "red" ? "rgba(157,44,44,0.15)" : tone === "amber" ? "rgba(196,101,30,0.18)" : "rgba(21,128,61,0.18)"}`,
+                                    }}
+                                />
+                                <span className="text-slate-700 leading-snug">{impact}</span>
                             </div>
                         ))}
                     </div>
@@ -441,6 +468,11 @@ const SimulatorTab = ({ initiatives, onResult }) => {
     const [wr, setWr] = useState(40);
     const [sm, setSm] = useState(true);
     const [desal, setDesal] = useState(false);
+    // New assumption inputs
+    const [wur, setWur] = useState(0.064);         // kl/kg, 0–3
+    const [maxProd, setMaxProd] = useState(5.1);   // kt/yr, 0–10
+    const [tariffEsc, setTariffEsc] = useState(6); // %, 0–15
+    const [treatEsc, setTreatEsc] = useState(9.36);// %, 0–20
     const [scenario, setScenario] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -453,6 +485,10 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                 water_recovery_pct: wr/100,
                 smart_metering_on: sm,
                 desalination_on: desal,
+                wur_kl_per_kg: wur,
+                max_production_kt: maxProd,
+                tariff_escalation: tariffEsc/100,
+                treatment_escalation: treatEsc/100,
             });
             setScenario(r.data);
             onResult(r.data);
@@ -460,7 +496,7 @@ const SimulatorTab = ({ initiatives, onResult }) => {
     };
 
     useEffect(() => { run(); /* eslint-disable-next-line */ }, []);
-    useEffect(() => { const t = setTimeout(run, 250); return () => clearTimeout(t); /* eslint-disable-next-line */ }, [rw, gw, wr, sm, desal]);
+    useEffect(() => { const t = setTimeout(run, 250); return () => clearTimeout(t); /* eslint-disable-next-line */ }, [rw, gw, wr, sm, desal, wur, maxProd, tariffEsc, treatEsc]);
 
     const sliderStyle = (v, max = 50) => ({ "--pct": `${(v/max)*100}%` });
 
@@ -540,6 +576,44 @@ const SimulatorTab = ({ initiatives, onResult }) => {
                                 <span className="track" />
                             </label>
                         </div>
+                    </div>
+
+                    {/* Model assumptions */}
+                    <div className="card p-5 space-y-4" data-testid="assumptions-card">
+                        <div>
+                            <div className="metric-label">Model assumptions</div>
+                            <h3 className="font-display text-base font-medium mt-1">Tune the underlying drivers</h3>
+                        </div>
+                        {[
+                            { id: "wur", label: "Water Use Ratio (WUR)", desc: "kl consumed per kg produced", v: wur, set: setWur, min: 0, max: 3, step: 0.001, unit: " kl/kg", colour: "#1171B8", fmt: (n) => n.toFixed(3) },
+                            { id: "maxprod", label: "Max annual production", desc: "Production ceiling (kilotonnes / yr)", v: maxProd, set: setMaxProd, min: 0.5, max: 10, step: 0.1, unit: " KT", colour: "#163F56", fmt: (n) => n.toFixed(1) },
+                            { id: "tariffEsc", label: "Tariff escalation", desc: "Annual municipal tariff growth", v: tariffEsc, set: setTariffEsc, min: 0, max: 15, step: 0.5, unit: "%", colour: "#4A90D9", fmt: (n) => n.toFixed(1) },
+                            { id: "treatEsc", label: "Treatment cost escalation", desc: "Annual treatment cost growth", v: treatEsc, set: setTreatEsc, min: 0, max: 20, step: 0.5, unit: "%", colour: "#062C60", fmt: (n) => n.toFixed(2) },
+                        ].map(({ id, label, desc, v, set, min, max, step, unit, colour, fmt }) => (
+                            <div key={id} data-testid={`assumption-${id}`}>
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <div className="text-sm font-medium">{label}</div>
+                                        <div className="text-[11px] text-slate-500">{desc}</div>
+                                    </div>
+                                    <div className="font-display text-lg" style={{ color: colour }}>
+                                        {fmt(v)}<span className="text-xs text-slate-400 font-sans">{unit}</span>
+                                    </div>
+                                </div>
+                                <input
+                                    data-testid={`assumption-slider-${id}`}
+                                    type="range"
+                                    min={min} max={max} step={step} value={v}
+                                    onChange={(e) => set(parseFloat(e.target.value))}
+                                    style={sliderStyle(v - min, max - min)}
+                                    className="mt-2"
+                                />
+                                <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+                                    <span>{fmt(min)}{unit}</span>
+                                    <span>{fmt(max)}{unit}</span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
